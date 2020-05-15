@@ -9,6 +9,7 @@ import numpy as np
 from hypothesis import given, assume
 import hypothesis.strategies as st
 import warnings
+import os
 
 
 class dynamo:
@@ -45,9 +46,13 @@ class dynamo:
         
   
         
-    def evolve (self):
-        pass
+    def evolve (self, out_filename):
+        os.system("g++ integrator.C")
+        arguments=' '+str(self.mu)+' '+str(self.k)+' '+str(self.initial_conditions[0])+' '+str(self.initial_conditions[1])+' '+str(self.initial_conditions[2])+' '+str(self.N_steps)+' '+out_filename
+        os.system("./a.out"+arguments)
         
+gino=dynamo(2, 1., 100, [0.1, 0.4, 0.6])
+gino.evolve("data.csv")
             
 #######TESTS#######
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))
@@ -70,6 +75,8 @@ def test_initial_conditions (x1_init, x2_init, y1_init, N_steps):
     assert dynamo_test.x2[0]==x2_init
     assert dynamo_test.y1[0]==y1_init
     assert dynamo_test.y2[0]==y1_init #because mu=1, k=1 -> A=mu*(k**2-k**-2)=0, and y2=y1-A
-
+    
+    
+    
 
     

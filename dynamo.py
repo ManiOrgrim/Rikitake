@@ -10,6 +10,7 @@ from hypothesis import given, assume
 import hypothesis.strategies as st
 import warnings
 import os
+import sys
 
 
 class dynamo:
@@ -51,8 +52,22 @@ class dynamo:
         arguments=' '+str(self.mu)+' '+str(self.k)+' '+str(self.initial_conditions[0])+' '+str(self.initial_conditions[1])+' '+str(self.initial_conditions[2])+' '+str(self.N_steps)+' '+out_filename
         os.system("./a.out"+arguments)
         
-gino=dynamo(2, 1., 100, [0.1, 0.4, 0.6])
-gino.evolve("data.csv")
+def get_input_values():
+    if (len(sys.argv)!=8):
+        #raise error
+        print('mh')
+    else:
+        mu=float(sys.argv[1])
+        k=float(sys.argv[2])
+        N_steps=int(sys.argv[3])
+        initial_conditions=[float(sys.argv[4]), float(sys.argv[5]), float(sys.argv[6])]
+        filename=sys.argv[7]
+    return mu, k, N_steps, initial_conditions, filename
+
+        
+mu, k, N_steps, initial_conditions, filename=get_input_values()
+gino=dynamo(mu, k, N_steps, initial_conditions)
+gino.evolve(filename)
             
 #######TESTS#######
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))

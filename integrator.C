@@ -60,7 +60,7 @@ void evolve () {for (int i=1; i<nsteps; i++){
 
 			}
 void printresults (ofstream& out){
-	out <<"mu ="<< mi <<"\tk="<<k<<'\n';
+	out <<"mu= "<< mi <<"\tk= "<<k<<'\n';
 	out << "Time\tx_1\tx_2\ty_1\ty_2\n";
 	for (int i=0; i<nsteps; i++){ 
 	out << dt*i <<';'<<x1[i] <<';'<< x2[i]<<';'<< y1[i]<< ';' << y2[i] <<'\n'; 

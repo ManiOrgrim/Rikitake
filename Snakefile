@@ -12,22 +12,22 @@ rule sim_0:
 	output:
 		"simulation_0.csv"
 	shell:
-		"python3 dynamo.py 1 1 13 0 0 0 {output}"
+		"python3 dynamo.py 1 2 10000 0 0 0 {output}"
 rule sim_1:
 	output:
 		"simulation_1.csv"
 	shell:
-		"python3 dynamo.py 1 1 13 0.1 0 0 {output}"
+		"python3 dynamo.py 1 2 10000 0.1 0 0 {output}"
 rule sim_2:
 	output:
 		"simulation_2.csv"
 	shell:
-		"python3 dynamo.py 1 1 13 0 0.1 0 {output}"
+		"python3 dynamo.py 1 2 10000 0 0.1 0 {output}"
 rule sim_3:
 	output:
 		"simulation_3.csv"
 	shell:
-		"python3 dynamo.py 1 1 13 0 0 0.1 {output}"
+		"python3 dynamo.py 1 2 10000 0 0 0.1 {output}"
 		
 rule create_image0:
 	input:

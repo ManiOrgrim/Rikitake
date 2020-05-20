@@ -32,6 +32,8 @@ def get_data(filename):
     return t, x1, x2, y1, y2, mu, k
 
 def get_param_values(line):
+    """this function takes the parameter values form the specific string in the input file"""
+
     mu=float(line.split()[1])
     k=float(line.split()[3])
     return mu, k
@@ -52,8 +54,7 @@ def generate_image(filename):
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
-def get_infile():
-    """returns the filename (string) given as input in command line"""
-    return sys.argv[1]
+files=["simulation_0.csv","simulation_1.csv","simulation_2.csv","simulation_3.csv"]
 
-generate_image(get_infile())
+for file in files:
+    generate_image(file)

@@ -65,9 +65,17 @@ def get_input_values():
     return mu, k, N_steps, initial_conditions, filename
 
         
-mu, k, N_steps, initial_conditions, filename=get_input_values()
-gino=dynamo(mu, k, N_steps, initial_conditions)
-gino.evolve(filename)
+in_data=open("input_values.txt", 'r')
+in_lines=in_data.readlines()
+for line in in_lines:
+    values=line.split()
+    mu=float(values[0])
+    k=float(values[1])
+    N_steps=int(values[2])
+    initial_conditions=[float(val) for val in values[3:6]]
+    filename=values[6]
+    dyno=dynamo(mu, k, N_steps, initial_conditions)
+    dyno.evolve(filename)
             
 #######TESTS#######
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))

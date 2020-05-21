@@ -67,6 +67,7 @@ def get_input_values():
         
 in_data=open("input_values.txt", 'r')
 in_lines=in_data.readlines()
+ID=0
 for line in in_lines:
     values=line.split()
     mu=float(values[0])
@@ -75,7 +76,8 @@ for line in in_lines:
     initial_conditions=[float(val) for val in values[3:6]]
     filename=values[6]
     dyno=dynamo(mu, k, N_steps, initial_conditions)
-    dyno.evolve(filename)
+    dyno.evolve(filename+'_'+str(ID)+'.csv')
+    ID+=1
             
 #######TESTS#######
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))

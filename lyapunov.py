@@ -47,13 +47,18 @@ def calculate_lyapunov(filename_1, filename_2):
         lyaps[i]=np.mean(log_diff_ratio[:i])
     return lyaps
 
-def get_results():
-    filename=[]
-    for n in range (1,4):
-        filename.append("simulation_"+str(n)+".csv")
-    lyaps=[]
-    for file in filename:
-        lyaps.append(calculate_lyapunov("simulation_0.csv", file))
+def get_simulation_ID():
+    in_file=open("input_values.txt",'r')
+    line=in_file.readline()
+    split_line=line.split()
+    simulation_ID=split_line[-1]
+    return simulation_ID
+
+
+def get_results(simulation_ID):
+    
+    filename=[simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
+    lyaps=[calculate_lyapunov(filename[0],file) for file in filename[1:]]
     results=[]
     for lyap in lyaps:
         lenght_ten=int(len(lyap)/10)
@@ -62,9 +67,9 @@ def get_results():
         results.append(mean_lyap)
     return results, lyaps
 
-def plot_exponents():
+def plot_exponents(simulation_ID):
     fig, subplots = plt.subplots(1, 3, figsize=(12, 4))
-    values, series=get_results()
+    values, series=get_results(simulation_ID)
     for i in range(3):
         subplots[i].plot(series[i], color='r')
         subplots[i].set_xlabel("simulation time")
@@ -72,12 +77,14 @@ def plot_exponents():
         subplots[i].hlines(values[i], 0, len(series[i]), label=str(values[i]))
         subplots[i].legend()
     return fig, values
-    
-fig, exp_values=plot_exponents()
-fig.savefig("lyapunov_exp.png", bbox_inches='tight')
-open_file=open("lyapunov_exp.dat",'w')
+
+
+simulation_ID=get_simulation_ID()   
+fig, exp_values=plot_exponents(simulation_ID)
+fig.savefig(simulation_ID+"lyap_exp.png", bbox_inches='tight')
+open_file=open(simulation_ID+"lyapunov_exp.dat",'w+')
 for v in exp_values:
-    open_file.write(str(v))
+    open_file.write(str(v)+' ')
         
     
 

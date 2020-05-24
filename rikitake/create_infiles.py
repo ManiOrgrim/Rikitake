@@ -27,7 +27,7 @@ def ask_for_data():
     outfile.write(in_data)
     outfile.close()
     
-def create_infile():
+def create_infile(save_dir):
     ask_for_data()
     in_data=read_input()
     mu=in_data[0]
@@ -42,7 +42,7 @@ def create_infile():
     initial_condition3[2]+=2**-4
     initial_conditions=[initial_condition, initial_condition1,initial_condition2,initial_condition3]
     identifier=in_data[6]
-    outfile=open("input_values.txt",'w+')
+    outfile=open(save_dir+"/input_values.txt",'w+')
     for condition in initial_conditions:
         outstring=str(mu)+' '+str(k)+' '+str(N_steps)+' '+str(condition[0])+' '+str(condition[1])+' '+str(condition[2])+' '+identifier+'\n'
         outfile.write(outstring)

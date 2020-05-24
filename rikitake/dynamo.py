@@ -47,7 +47,7 @@ class dynamo:
         
   
         
-    def evolve (self, out_filename):
+    def evolve (self, out_filename, save_dir):
 
           os.system("g++ integrator.C")
           arguments=' '+str(self.mu)+' '+str(self.k)+' '+str(self.initial_conditions[0])+' '+str(self.initial_conditions[1])+' '+str(self.initial_conditions[2])+' '+str(self.N_steps)+' '+out_filename
@@ -65,9 +65,8 @@ def get_input_values():
         filename=sys.argv[7]
     return mu, k, N_steps, initial_conditions, filename
 
-def generate_data(): 
-	print("	I WANNA ROCK ")     
-	in_data=open("input_values.txt", 'r')
+def generate_data(save_dir):      
+	in_data=open(save_dir+"/input_values.txt", 'r')
 	in_lines=in_data.readlines()
 	ID=0
 	for line in in_lines:
@@ -78,7 +77,7 @@ def generate_data():
     		initial_conditions=[float(val) for val in values[3:6]]
     		filename=values[6]
     		dyno=dynamo(mu, k, N_steps, initial_conditions)
-    		dyno.evolve(filename+'_'+str(ID)+'.csv')
+    		dyno.evolve(save_dir+'/'+filename+'_'+str(ID)+'.csv', save_dir)
     		ID+=1
             
 #######TESTS#######

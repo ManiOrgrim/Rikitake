@@ -50,17 +50,17 @@ def calculate_lyapunov(filename_1, filename_2):
         lyaps[i]=sum_til_now/i
     return lyaps
 
-def get_simulation_ID():
-    in_file=open("input_values.txt",'r')
+def get_simulation_ID(save_dir):
+    in_file=open(save_dir+"/input_values.txt",'r')
     line=in_file.readline()
     split_line=line.split()
     simulation_ID=split_line[-1]
     return simulation_ID
 
 
-def get_results(simulation_ID):
+def get_results(simulation_ID, save_dir):
     
-    filename=[simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
+    filename=[save_dir+'/'+simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
     lyaps=[calculate_lyapunov(filename[0],file) for file in filename[1:]]
     results=[]
     for lyap in lyaps:
@@ -70,9 +70,9 @@ def get_results(simulation_ID):
         results.append(mean_lyap)
     return results, lyaps
 
-def plot_exponents(simulation_ID):
+def plot_exponents(simulation_ID, save_dir):
     fig, subplots = plt.subplots(1, 3, figsize=(12, 4))
-    values, series=get_results(simulation_ID)
+    values, series=get_results(simulation_ID, save_dir)
     for i in range(3):
         subplots[i].plot(series[i], color='r')
         subplots[i].set_xlabel("simulation time")
@@ -81,11 +81,11 @@ def plot_exponents(simulation_ID):
         subplots[i].legend()
     return fig, values
 
-def lyapunov():
-   simulation_ID=get_simulation_ID()   
-   fig, exp_values=plot_exponents(simulation_ID)
-   fig.savefig(simulation_ID+"lyap_exp.png", bbox_inches='tight')
-   open_file=open(simulation_ID+"lyapunov_exp.dat",'w+')
+def lyapunov(save_dir):
+   simulation_ID=get_simulation_ID(save_dir)   
+   fig, exp_values=plot_exponents(simulation_ID, save_dir)
+   fig.savefig(save_dir+'/'+simulation_ID+"lyap_exp.png", bbox_inches='tight')
+   open_file=open(save_dir+'/'+simulation_ID+"lyapunov_exp.dat",'w+')
    for v in exp_values:
        open_file.write(str(v)+' ')
         

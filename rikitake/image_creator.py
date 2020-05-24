@@ -54,16 +54,16 @@ def generate_image(filename):
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
-def get_simulation_ID():
-    in_file=open("input_values.txt",'r')
+def get_simulation_ID(save_dir):
+    in_file=open(save_dir+"/input_values.txt",'r')
     line=in_file.readline()
     split_line=line.split()
     simulation_ID=split_line[-1]
     return simulation_ID
 
-def generate_images():
-   simulation_ID=get_simulation_ID()    
-   files=[simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
+def generate_images(save_dir):
+   simulation_ID=get_simulation_ID(save_dir)    
+   files=[save_dir+'/'+simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
 
    for file in files:
        generate_image(file)

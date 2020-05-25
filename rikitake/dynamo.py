@@ -12,6 +12,7 @@ import warnings
 import os
 import sys
 from subprocess import run
+import integrator
 
 class dynamo:
     """this class represents a single simulation
@@ -47,11 +48,9 @@ class dynamo:
         
   
         
-    def evolve (self, out_filename, save_dir):
-
-          os.system("g++ integrator.C")
-          arguments=' '+str(self.mu)+' '+str(self.k)+' '+str(self.initial_conditions[0])+' '+str(self.initial_conditions[1])+' '+str(self.initial_conditions[2])+' '+str(self.N_steps)+' '+out_filename
-          os.system("./a.out"+arguments)
+    def evolve (self, outfile_name,dt):
+        integrator.evolve(self.mu, self.k, self.N_steps, self.initial_conditions,outfile_name, dt)
+        
         
 def get_input_values():
     if (len(sys.argv)!=8):
@@ -65,20 +64,27 @@ def get_input_values():
         filename=sys.argv[7]
     return mu, k, N_steps, initial_conditions, filename
 
-def generate_data(save_dir):      
-	in_data=open(save_dir+"/input_values.txt", 'r')
-	in_lines=in_data.readlines()
-	ID=0
-	for line in in_lines:
-    		values=line.split()
-    		mu=float(values[0])
-    		k=float(values[1])
-    		N_steps=int(values[2])
-    		initial_conditions=[float(val) for val in values[3:6]]
-    		filename=values[6]
-    		dyno=dynamo(mu, k, N_steps, initial_conditions)
-    		dyno.evolve(save_dir+'/'+filename+'_'+str(ID)+'.csv', save_dir)
-    		ID+=1
+def generate_data(save_dir, dt):      
+   in_data=open(save_dir+"/input_values.txt", 'r')
+   in_lines=in_data.readlines()
+   N_sim=0
+   for line in in_lines:
+        values=line.split()
+        mu=float(values[0])
+        k=float(values[1])
+        N_steps=int(values[2])
+        initial_conditions=[float(val) for val in values[3:6]]
+        simulation_ID=values[6]
+        dyno=dynamo(mu, k, N_steps, initial_conditions)
+        outfile_name=save_dir+'/'+simulation_ID+'_'+str(N_sim)+'.csv'
+        dyno.evolve(outfile_name, dt)
+        N_sim+=1
+    	   
+           
+    	  
+    
+         
+         
             
 #######TESTS#######
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))

@@ -14,7 +14,8 @@ class Rikitake(cli.Application):
     PROGNAME = "rikitake"
     VERSION ="0.1"
     
-    save_dir="" #if not changed, results will be saved in currently working directory
+    save_dir=os.getcwd() #if not changed, results will be saved in currently working directory
+    dt=2**-8
 
     @cli.switch('--save-dir', str)
     def set_save_dir (self, path_to_dir):
@@ -27,7 +28,7 @@ class Rikitake(cli.Application):
             self.there_is_infile()
         else:
             self.there_is_not_infile()
-        dynamo.generate_data(self.save_dir)
+        dynamo.generate_data(self.save_dir, self.dt)
         image_creator.generate_images(self.save_dir)
         lyapunov.lyapunov(self.save_dir)
         if(terminal.ask("Run another simulation?")):

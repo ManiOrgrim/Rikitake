@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 18 15:09:06 2020
-
 @author: mani
 """
 import numpy as np
@@ -75,7 +74,7 @@ def plot_exponents(simulation_ID, save_dir):
     values, series=get_results(simulation_ID, save_dir)
     for i in range(3):
         subplots[i].plot(series[i], color='r')
-        subplots[i].set_xlabel("simulation time")
+        subplots[i].set_xlabel("integration steps")
         subplots[i].set_ylabel("Lyapuniov exponent estmate")
         subplots[i].hlines(values[i], 0, len(series[i]), label=str(values[i]))
         subplots[i].legend()
@@ -88,6 +87,3 @@ def lyapunov(save_dir):
    open_file=open(save_dir+'/'+simulation_ID+"lyapunov_exp.dat",'w+')
    for v in exp_values:
        open_file.write(str(v)+' ')
-        
-    
-

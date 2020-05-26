@@ -5,9 +5,7 @@ Created on Sat May 16 18:00:07 2020
 
 @author: mani
 """
-import sys
 import matplotlib.pylab as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 
 def get_data(filename):

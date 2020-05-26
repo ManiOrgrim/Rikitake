@@ -9,7 +9,7 @@ import numpy as np
 from hypothesis import given, assume
 import hypothesis.strategies as st
 import dynamo as dyn
-import image_creator
+import read_data
 
 
 
@@ -47,7 +47,7 @@ def test_steady_state(mu, k, sign):
     y2_0=mu*k**-2
     dynamo_test=dyn.dynamo(mu,k,30, [x1_0, x2_0, y1_0])
     dynamo_test.evolve("test_output.csv", 2**-8)
-    t, x1, x2,  y1, y2, mu, k=image_creator.get_data("test_output.csv")
+    t, x1, x2,  y1, y2, mu, k=read_data.get_data("test_output.csv", '1')
     assert (abs(x1[-1]-x1_0)<2*10**-6)
     assert (abs(x2[-1]-x2_0)<2*10**-6)
     assert (abs(y1[-1]-y1_0)<2*10**-6)

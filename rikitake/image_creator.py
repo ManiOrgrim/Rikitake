@@ -6,42 +6,15 @@ Created on Sat May 16 18:00:07 2020
 @author: mani
 """
 import matplotlib.pylab as plt
+import read_data
 
-
-def get_data(filename):
-    """this function opens the input file and read the lines containing data.
-    Returns a list of floats for time and variables"""
-    infile=open(filename, 'r')
-    lines=infile.readlines()
-    mu, k =get_param_values(lines[0])
-    x1=[]
-    x2=[]
-    y1=[]
-    y2=[]
-    t=[]
-    for instant in lines[2:]:
-        data=instant.split(';')
-        t.append(float(data[0]))
-        x1.append(float(data[1]))
-        x2.append(float(data[2]))
-        y1.append(float(data[3]))
-        y2.append(float(data[4]))
-    infile.close()
-    return t, x1, x2, y1, y2, mu, k
-
-def get_param_values(line):
-    """this function takes the parameter values form the specific string in the input file"""
-
-    mu=float(line.split()[1])
-    k=float(line.split()[3])
-    return mu, k
     
     
 
 def generate_image(filename):
     """ this function creates the (x2,y1) plot saving it in working directory as 'filename.png'"""
     plt.figure(figsize=(10,10))
-    t, x1, x2, y1, y2, mu, k=get_data(filename)
+    t, x1, x2, y1, y2, mu, k=read_data.get_data(filename, '1')
     plt.plot(x2,y1)
     title_text='Rikitake dynamo phase space with mu ='+str(mu)+' k='+str(k)
     plt.suptitle(title_text,fontsize=20)
@@ -52,15 +25,8 @@ def generate_image(filename):
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
-def get_simulation_ID(save_dir):
-    in_file=open(save_dir+"/input_values.txt",'r')
-    line=in_file.readline()
-    split_line=line.split()
-    simulation_ID=split_line[-1]
-    return simulation_ID
-
 def generate_images(save_dir):
-   simulation_ID=get_simulation_ID(save_dir)    
+   simulation_ID=read_data.get_simulation_ID(save_dir)    
    files=[save_dir+'/'+simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
 
    for file in files:

@@ -6,31 +6,12 @@ Created on Mon May 18 15:09:06 2020
 """
 import numpy as np
 import matplotlib.pylab as plt
-import matplotlib.pyplot as pyplot
+import read_data
 
-
-def get_data(filename):
-    """this function opens the input file and read the lines containing data.
-    Returns a list of floats for time and variables"""
-    infile=open(filename, 'r')
-    lines=infile.readlines()
-    mu, k =get_param_values(lines[0])
-    data=np.empty((len(lines[2:]), 4))
-    for i in range(len(lines[2:])):
-        line=lines[2+i]
-        values=line.split(';')
-        data[i]=[values[1],values[2], values[3], values[4]]
-    return data, mu, k
-
-def get_param_values(line):
-    """this function takes the parameter values form the specific string in the input file"""
-    mu=float(line.split()[1])
-    k=float(line.split()[3])
-    return mu, k
 
 def calculate_lyapunov(filename_1, filename_2):
-    data_1, mu_1, k_1=get_data(filename_1)
-    data_2, mu_2, k_2=get_data(filename_2)
+    data_1, mu_1, k_1=read_data.get_data(filename_1,'2')
+    data_2, mu_2, k_2=read_data.get_data(filename_2,'2')
     lenght=len(data_1)
     assert lenght==len(data_2)
     assert mu_1==mu_2
@@ -48,13 +29,6 @@ def calculate_lyapunov(filename_1, filename_2):
         #lyaps[i]=np.mean(log_diff_ratio[:i])
         lyaps[i]=sum_til_now/i
     return lyaps
-
-def get_simulation_ID(save_dir):
-    in_file=open(save_dir+"/input_values.txt",'r')
-    line=in_file.readline()
-    split_line=line.split()
-    simulation_ID=split_line[-1]
-    return simulation_ID
 
 
 def get_results(simulation_ID, save_dir):
@@ -81,7 +55,7 @@ def plot_exponents(simulation_ID, save_dir):
     return fig, values
 
 def lyapunov(save_dir):
-   simulation_ID=get_simulation_ID(save_dir)   
+   simulation_ID=read_data.get_simulation_ID(save_dir)   
    fig, exp_values=plot_exponents(simulation_ID, save_dir)
    fig.savefig(save_dir+'/'+simulation_ID+"lyap_exp.png", bbox_inches='tight')
    open_file=open(save_dir+'/'+simulation_ID+"lyapunov_exp.dat",'w+')

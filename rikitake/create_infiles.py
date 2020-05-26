@@ -22,7 +22,19 @@ def read_input():
     return split_string
 
 def ask_for_data():
-    in_data=terminal.prompt("Type the data in the form 'mu k N_steps x1_0 x2_0 y1_0 simulation_identifier")
+    while (True):
+       in_data=terminal.prompt("Type the data in the form 'mu k N_steps x1_0 x2_0 y1_0 simulation_identifier")
+       mu=float(in_data.split()[0])
+       k=float(in_data.split()[1])
+       if (0<mu<10**2 and 1e-2<k<1e+2):
+           break
+       else:
+           go_on=terminal.ask("""The values of mu and k you choose may cause overflow issues.
+                        It is reccommended that 0< mu< 10^2 and 10^-2< k < 10^2.
+                        Continue anyway?""")
+           if (go_on):
+               break         
+    
     outfile=open("temp_for_create_infiles.txt",'w+')
     outfile.write(in_data)
     outfile.close()

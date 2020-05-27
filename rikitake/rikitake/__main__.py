@@ -3,7 +3,7 @@ from plumbum import cli
 import plumbum.cli.terminal as terminal
 import os
 import create_infiles
-import dynamo
+import integrator
 import image_creator
 import lyapunov
 
@@ -27,7 +27,7 @@ class Rikitake(cli.Application):
         else:
             self.there_is_not_infile()
         if not self.dont_perform_integration:
-           dynamo.generate_data(self.save_dir, self.dt)
+           integrator.generate_data(self.save_dir, self.dt)
         if not self.dont_generate_images:
            image_creator.generate_images(self.save_dir)
         if not self.dont_calculate_lyapunov:

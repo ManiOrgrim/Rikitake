@@ -6,20 +6,39 @@ Created on Mon May 25 10:24:22 2020
 @author: mani
 """
 import numpy as np
+import warnings
 
 #we take in input: mu, k, Nsteps, initial conditions, simID
 class dynamo:
+    """this class represents a single simulation
+       states and parameters are stored"""
+    
     def __init__(self, mu, k, N_steps, initial_conditions, outfile_name, dt):
-        self.mu=mu
-        self.k=k
-        self.A=mu*(k**2-k**-2)
+        """setting parameters
+        with precaution againts overflow errors"""
+        if (abs(k)<10**-100 or abs(k)>10e+99):                 
+            warnings.warn("value of k too big or too small, A will be set as nan")            
+        elif (type(N_steps)!=int or N_steps<1):
+            warnings.warn("N_steps must be a positive integer!")
+        elif (np.nan in initial_conditions):
+            warnings.warn("One or more initial condition in nan")
+        elif (N_steps >10e+7):
+            warnings.warn("N_steps too great can cause memory allocation errors")
+        else:
+            self.mu=mu
+            self.k=k
+            self.A=self.mu*(self.k**2-self.k**-2) 
+        #TODO mettere una gestione per gli input male
         self.N_steps=N_steps
+        """creating arrays to store states and setting initial conditions"""
         self.x1=np.empty(self.N_steps)
         self.x2=np.empty(self.N_steps)
         self.y1=np.empty(self.N_steps)
+        self.time=np.empty(self.N_steps)
         self.x1[0]=initial_conditions[0]
         self.x2[0]=initial_conditions[1]
         self.y1[0]=initial_conditions[2]
+        self.time[0]=0
         self.outfile_name=outfile_name
         self.dt=dt
     
@@ -28,6 +47,7 @@ class dynamo:
             self.x1[i]=self.Evo_x1(i-1)
             self.x2[i]=self.Evo_x2(i-1)
             self.y1[i]=self.Evo_y1(i-1)
+            self.time[i]=i*self.dt
         self.y2=self.y1-self.A
         
     def Evo_x1(self,i):
@@ -93,8 +113,20 @@ class dynamo:
         
         
     
-
-def evolve (mu, k, N_steps, initial_conditions, outfile_name, dt):
-    dyno=dynamo(mu,k,N_steps, initial_conditions, outfile_name, dt)
-    dyno.evolve()
-    dyno.write_results()
+def generate_data(save_dir, dt):      
+   in_data=open(save_dir+"/input_values.txt", 'r')
+   in_lines=in_data.readlines()
+   N_sim=0
+   for line in in_lines:
+        values=line.split()
+        mu=float(values[0])
+        k=float(values[1])
+        N_steps=int(values[2])
+        initial_conditions=[float(val) for val in values[3:6]]
+        simulation_ID=values[6]
+        outfile_name=save_dir+'/'+simulation_ID+'_'+str(N_sim)+'.csv'
+        dyno=dynamo(mu, k, N_steps, initial_conditions, outfile_name, dt)
+        dyno.evolve()
+        dyno.write_results()
+        N_sim+=1
+    	   

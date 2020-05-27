@@ -5,9 +5,7 @@ Created on Wed May 20 16:52:18 2020
 
 @author: mani
 """
-import numpy as np
-from plumbum import cli
-import sys
+
 import plumbum.cli.terminal as terminal
 
 
@@ -29,7 +27,7 @@ def ask_for_data():
        if (0<mu<10**2 and 1e-2<k<1e+2):
            break
        else:
-           go_on=terminal.ask("""The values of mu and k you choose may cause overflow issues.
+           go_on=terminal.ask("""The values of mu or k you choose may cause overflow issues.
                         It is reccommended that 0< mu< 10^2 and 10^-2< k < 10^2.
                         Continue anyway?""")
            if (go_on):

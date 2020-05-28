@@ -19,6 +19,10 @@ class Rikitake(cli.Application):
     
     save_dir=os.getcwd() #if not changed, results will be saved in currently working directory
     dt=2**-8
+    
+    integration_completed=False
+    images_created=False
+    lyap_exp_calculated=False
 
     def main (self):
         """This function leads the exectution of the program."""
@@ -27,18 +31,27 @@ class Rikitake(cli.Application):
         else:
             self.there_is_not_infile()
         if not self.dont_perform_integration:
-           integrator.generate_data(self.save_dir, self.dt)
+           self.integration_completed=integrator.generate_data(self.save_dir, self.dt)
         if not self.dont_generate_images:
-           image_creator.generate_images(self.save_dir)
+           self.images_created=image_creator.generate_images(self.save_dir)
         if not self.dont_calculate_lyapunov:
-           lyapunov.lyapunov(self.save_dir)
+           self.lyap_exp_calculated=lyapunov.lyapunov(self.save_dir)
+        if (self.integration_completed and self.images_created and self.lyap_exp_calculated and self.verbose):
+            print("All the process worked successfully.")
+        elif(self.verbose):
+            print("Only these processes have been performed:")
+            print("INTEGRATION:",self.integration_completed)
+            print("IMAGE GENERATION:",self.images_created)
+            print("LYAPUNOV EXPONENTS:",self.lyap_exp_calculated)
         if(terminal.ask("Run another simulation?")):
             print("Please rename/save elsewhere the present 'input_values.txt' if you will to change it for this simulation.")
             self.main()
-            
+   
     dont_perform_integration=cli.Flag(["NOint","NOintegration"], help ="If given integration will not be performed.")
     dont_generate_images=cli.Flag(["NOimg","NOimages"],help="If given phase space images will not be generated.")
     dont_calculate_lyapunov=cli.Flag(["NOly","NOlyapunov"], help="If given lyapunov exponents calculation will not be performed.")
+    verbose = cli.Flag(["v", "verbose"], help = "If given the program will be very talkative.")
+   
     
             
     
@@ -76,7 +89,7 @@ class Rikitake(cli.Application):
         """Creates a new 'input_values.txt' file in save_dir. 
         If such file exists it will be replaced."""
         create_infiles.create_infile(self.save_dir)
-    
+
         
         
 if __name__=='__main__':

@@ -7,8 +7,6 @@ Created on Sat May 16 18:00:07 2020
 """
 import matplotlib.pylab as plt
 import read_data
-
-    
     
 
 def generate_image(filename):
@@ -28,6 +26,7 @@ def generate_image(filename):
 def generate_images(save_dir):
    simulation_ID=read_data.get_simulation_ID(save_dir)    
    files=[save_dir+'/'+simulation_ID+'_'+str(i)+'.csv' for i in range(4)]
-
    for file in files:
        generate_image(file)
+   return True
+

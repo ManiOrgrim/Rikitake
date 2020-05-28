@@ -6,6 +6,7 @@ Created on Tue May 26 14:55:15 2020
 @author: mani
 """
 import numpy as np
+import sys
 
 def get_param_values(line):
     """this function takes the parameter values form the specific string in the input file"""
@@ -26,7 +27,11 @@ def get_data(filename, form):
 def get_data_format1(filename):
     """this function opens the input file and read the lines containing data.
     Returns a list of floats for time and variables"""
-    infile=open(filename, 'r')
+    try:
+       infile=open(filename, 'r')
+    except OSError:
+       print("Could not open ",filename, "maybe you did not perform integration first?", file=sys.stderr)
+       sys.exit([1]) #4: could not open integration files
     lines=infile.readlines()
     mu, k =get_param_values(lines[0])
     x1=[]
@@ -47,7 +52,12 @@ def get_data_format1(filename):
 def get_data_format2(filename):
     """this function opens the input file and read the lines containing data.
     Returns a list of floats for time and variables"""
-    infile=open(filename, 'r')
+    try:
+       infile=open(filename, 'r')
+    except OSError:
+       print("Could not open ",filename, "maybe you did not perform integration first?", file=sys.stderr)
+       sys.exit([1]) #4: could not open integration files
+    
     lines=infile.readlines()
     mu, k =get_param_values(lines[0])
     data=np.empty((len(lines[2:]), 4))
@@ -58,7 +68,11 @@ def get_data_format2(filename):
     return data, mu, k
 
 def get_simulation_ID(save_dir):
-    in_file=open(save_dir+"/input_values.txt",'r')
+    try:
+       in_file=open(save_dir+"/input_values.txt",'r')
+    except OSError:
+        print("Could not find input_values.txt file")
+        sys.exit([2]) #could not find input_values.txt
     line=in_file.readline()
     split_line=line.split()
     simulation_ID=split_line[-1]

@@ -56,4 +56,3 @@ def test_steady_state(mu, k, sign):
     assert (abs(y2[-1]-y2_0)<2*10**-6)
     os.remove("test_output.csv")
     
-    

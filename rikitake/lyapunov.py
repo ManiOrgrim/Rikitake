@@ -61,3 +61,4 @@ def lyapunov(save_dir):
    open_file=open(save_dir+'/'+simulation_ID+"lyapunov_exp.dat",'w+')
    for v in exp_values:
        open_file.write(str(v)+' ')
+   return True

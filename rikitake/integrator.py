@@ -7,6 +7,7 @@ Created on Mon May 25 10:24:22 2020
 """
 import numpy as np
 import warnings
+import sys
 
 #we take in input: mu, k, Nsteps, initial conditions, simID
 class dynamo:
@@ -34,6 +35,7 @@ class dynamo:
         self.x1=np.empty(self.N_steps)
         self.x2=np.empty(self.N_steps)
         self.y1=np.empty(self.N_steps)
+        self.y2=np.empty(self.N_steps)
         self.time=np.empty(self.N_steps)
         self.x1[0]=initial_conditions[0]
         self.x2[0]=initial_conditions[1]
@@ -113,8 +115,12 @@ class dynamo:
         
         
     
-def generate_data(save_dir, dt):      
-   in_data=open(save_dir+"/input_values.txt", 'r')
+def generate_data(save_dir, dt):  
+   try:
+       in_data=open(save_dir+"/input_values.txt",'r')
+   except OSError:
+        print("Could not find input_values.txt file")
+        sys.exit([2]) #could not find input_values.txt    
    in_lines=in_data.readlines()
    N_sim=0
    for line in in_lines:
@@ -129,4 +135,5 @@ def generate_data(save_dir, dt):
         dyno.evolve()
         dyno.write_results()
         N_sim+=1
+   return True
     	   

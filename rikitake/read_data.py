@@ -7,6 +7,7 @@ Created on Tue May 26 14:55:15 2020
 """
 import numpy as np
 import sys
+from plumbum import colors
 
 def get_param_values(line):
     """this function takes the parameter values form the specific string in the input file"""
@@ -21,7 +22,7 @@ def get_data(filename, form):
     elif (form=='2'):
         return get_data_format2(filename)
     else:
-        #TODO raise error
+        raise ValueError('Wrong paramteter in get_data function')
         pass
 
 def get_data_format1(filename):
@@ -30,7 +31,7 @@ def get_data_format1(filename):
     try:
        infile=open(filename, 'r')
     except OSError:
-       print("Could not open ",filename, "maybe you did not perform integration first?", file=sys.stderr)
+       print(colors.red|"\nCould not open {}, maybe you did not perform integration first?".format(filename), file=sys.stderr)
        sys.exit([1]) #4: could not open integration files
     lines=infile.readlines()
     mu, k =get_param_values(lines[0])
@@ -55,7 +56,7 @@ def get_data_format2(filename):
     try:
        infile=open(filename, 'r')
     except OSError:
-       print("Could not open ",filename, "maybe you did not perform integration first?", file=sys.stderr)
+       print(colors.red|"\nCould not open {}, maybe you did not perform integration first?".format(filename), file=sys.stderr)
        sys.exit([1]) #4: could not open integration files
     
     lines=infile.readlines()
@@ -71,7 +72,7 @@ def get_simulation_ID(save_dir):
     try:
        in_file=open(save_dir+"/input_values.txt",'r')
     except OSError:
-        print("Could not find input_values.txt file")
+        print(colors.red|"Could not find input_values.txt file")
         sys.exit([2]) #could not find input_values.txt
     line=in_file.readline()
     split_line=line.split()

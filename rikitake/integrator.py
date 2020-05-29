@@ -6,30 +6,20 @@ Created on Mon May 25 10:24:22 2020
 @author: mani
 """
 import numpy as np
-import warnings
 import sys
+from plumbum.cli.terminal import Progress
+from plumbum import colors
+
 
 #we take in input: mu, k, Nsteps, initial conditions, simID
 class dynamo:
-    """this class represents a single simulation
+    """this class represents a single simulation.
        states and parameters are stored"""
     
     def __init__(self, mu, k, N_steps, initial_conditions, outfile_name, dt):
-        """setting parameters
-        with precaution againts overflow errors"""
-        if (abs(k)<10**-100 or abs(k)>10e+99):                 
-            warnings.warn("value of k too big or too small, A will be set as nan")            
-        elif (type(N_steps)!=int or N_steps<1):
-            warnings.warn("N_steps must be a positive integer!")
-        elif (np.nan in initial_conditions):
-            warnings.warn("One or more initial condition in nan")
-        elif (N_steps >10e+7):
-            warnings.warn("N_steps too great can cause memory allocation errors")
-        else:
-            self.mu=mu
-            self.k=k
-            self.A=self.mu*(self.k**2-self.k**-2) 
-        #TODO mettere una gestione per gli input male
+        self.mu=mu
+        self.k=k
+        self.A=self.mu*(self.k**2-self.k**-2) 
         self.N_steps=N_steps
         """creating arrays to store states and setting initial conditions"""
         self.x1=np.empty(self.N_steps)
@@ -44,14 +34,16 @@ class dynamo:
         self.outfile_name=outfile_name
         self.dt=dt
     
-    def evolve (self):
-        for i in range (1, self.N_steps):
+    def evolve (self, N_sim):
+        """This function performs the evolution of the states."""
+        print("Integration ", N_sim+1, "/4")
+        for i in Progress.range(1,self.N_steps):
             self.x1[i]=self.Evo_x1(i-1)
             self.x2[i]=self.Evo_x2(i-1)
             self.y1[i]=self.Evo_y1(i-1)
             self.time[i]=i*self.dt
         self.y2=self.y1-self.A
-        
+    """The following functions perform a single step of the 6th order Runge-Kutta integration for each variable."""
     def Evo_x1(self,i):
         return (self.x1[i]+self.dt*(self.k1x1(i)+self.k2x1(i)+self.k3x1(i)+self.k4x1(i)+self.k5x1(i)+self.k6x1(i))/6)
     def Evo_x2(self,i):
@@ -59,6 +51,7 @@ class dynamo:
     def Evo_y1(self, i):
         return (self.y1[i]+self.dt*(self.k1y1(i)+self.k2y1(i)+self.k3y1(i)+self.k4y1(i)+self.k5y1(i)+self.k6y1(i))/6)
     
+    """The following functions calculate the 6th order RK factors"""
     def k1x1 (self, i):
         return (-self.mu*self.x1[i]+self.y1[i]*self.x2[i])
     def k1x2 (self,i):
@@ -103,6 +96,7 @@ class dynamo:
        
         
     def write_results(self):
+        """This function saves the integration results in outfile_name file."""
         file_name= self.outfile_name
         outfile=open(file_name, 'w+')
         line1="mu= "+str(self.mu)+"\tk= "+str(self.k)+"\n"
@@ -116,24 +110,37 @@ class dynamo:
         
     
 def generate_data(save_dir, dt):  
+   """This function leads the integration process and writes the data."""
+   
+   """reading all the needed parameters"""
    try:
        in_data=open(save_dir+"/input_values.txt",'r')
    except OSError:
-        print("Could not find input_values.txt file")
+        print(colors.red|"Could not find input_values.txt file")
         sys.exit([2]) #could not find input_values.txt    
    in_lines=in_data.readlines()
    N_sim=0
    for line in in_lines:
+        """Each line represents a set of integration parameters"""
         values=line.split()
-        mu=float(values[0])
-        k=float(values[1])
-        N_steps=int(values[2])
-        initial_conditions=[float(val) for val in values[3:6]]
-        simulation_ID=values[6]
+        try:
+           mu=float(values[0])
+           k=float(values[1])
+           N_steps=int(values[2])
+           initial_conditions=[float(val) for val in values[3:6]]
+           simulation_ID=values[6]
+        except ValueError or IndexError:
+           print(colors.red|"'input_values.txt' is not written as expected.")
+           sys.exit([5]) #Error in 'input_values.txt
         outfile_name=save_dir+'/'+simulation_ID+'_'+str(N_sim)+'.csv'
+        
+        """actual integration"""
         dyno=dynamo(mu, k, N_steps, initial_conditions, outfile_name, dt)
-        dyno.evolve()
+        dyno.evolve(N_sim)
+        
+        """writing the results"""
         dyno.write_results()
+        
         N_sim+=1
    return True
     	   

@@ -2,6 +2,9 @@
 from plumbum import cli
 import plumbum.cli.terminal as terminal
 import os
+import sys
+from plumbum import colors
+
 import create_infiles
 import integrator
 import image_creator
@@ -33,23 +36,25 @@ class Rikitake(cli.Application):
         if not self.dont_perform_integration:
            self.integration_completed=integrator.generate_data(self.save_dir, self.dt)
         if not self.dont_generate_images:
-           self.images_created=image_creator.generate_images(self.save_dir)
+           self.images_created=image_creator.image_creator(self.save_dir)
         if not self.dont_calculate_lyapunov:
            self.lyap_exp_calculated=lyapunov.lyapunov(self.save_dir)
         if (self.integration_completed and self.images_created and self.lyap_exp_calculated and self.verbose):
-            print("All the process worked successfully.")
-        elif(self.verbose):
-            print("Only these processes have been performed:")
-            print("INTEGRATION:",self.integration_completed)
-            print("IMAGE GENERATION:",self.images_created)
-            print("LYAPUNOV EXPONENTS:",self.lyap_exp_calculated)
+            print(colors.green|"Process completed.")
+        if(self.verbose):
+            print(colors.green|"These processes have been performed:")
+            print(colors.green|"INTEGRATION:",self.integration_completed)
+            print(colors.green|"IMAGE GENERATION:",self.images_created)
+            print(colors.green|"LYAPUNOV EXPONENTS:",self.lyap_exp_calculated)
         if(terminal.ask("Run another simulation?")):
-            print("Please rename/save elsewhere the present 'input_values.txt' if you will to change it for this simulation.")
+            print("Please rename/save elsewhere the present 'input_values.txt' if you want to change it for this simulation.")
             self.main()
+        else: sys.exit([0])
    
     dont_perform_integration=cli.Flag(["NOint","NOintegration"], help ="If given integration will not be performed.")
     dont_generate_images=cli.Flag(["NOimg","NOimages"],help="If given phase space images will not be generated.")
     dont_calculate_lyapunov=cli.Flag(["NOly","NOlyapunov"], help="If given lyapunov exponents calculation will not be performed.")
+    
     verbose = cli.Flag(["v", "verbose"], help = "If given the program will be very talkative.")
    
     
@@ -77,7 +82,7 @@ class Rikitake(cli.Application):
 
         answer=terminal.ask("Do you want to create a new 'input_values.txt' file?")
         if (answer):
-            answer2=terminal.ask("This process will overwrite DEFINITEVELY 'input_values.txt'. Do you still want to proceed?")
+            answer2=terminal.ask(colors.yellow|"This process will overwrite DEFINITEVELY 'input_values.txt'. Do you still want to proceed?")
             if (answer2):
                 self.create_infile()
     

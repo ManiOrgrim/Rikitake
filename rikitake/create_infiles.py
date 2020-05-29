@@ -46,22 +46,28 @@ def ask_for_data():
           k=float(in_data.split()[1])
           N_steps=int(in_data.split()[2])
           if (N_steps<20000):
-              warnings.warn(colors.yellow|"The number of integration steps may be too small. Convergence of Lyapunov exponents is not granted.")
+              print(colors.yellow|"The number of integration steps may be too small. Convergence of Lyapunov exponents is not granted.")
           x1_0=float(in_data.split()[3])
           x2_0=float(in_data.split()[4])
           y1_0=float(in_data.split()[5])
+          simulation_ID=in_data.split()[6]
        except ValueError:
           print(colors.yellow|"Some of the parameter values you gave are not numbers. Please try again.")
           continue
        if (0<mu<10**2 and 1e-2<k<1e+2):
-           break
+           pass
        else:
-           go_on=terminal.ask(colors.yellow|"""The values of mu or k you choose may cause overflow issues.
+           go_on1=terminal.ask(colors.yellow|"""The values of mu or k you choose may cause overflow issues.
                         It is reccommended that 0< mu< 10^2 and 10^-2< k < 10^2.
                         Continue anyway?""")
-           if (go_on):
-               break         
-    
+           if (go_on1):
+               pass
+       if ('.' not in simulation_ID):
+           break
+       else:
+           go_on2=terminal.ask(colors.yellow|"""The presence of '.' character in simulation ID may cause issues when saving images. Continue anyway?""")
+           if (go_on2):
+               break    
     outfile=open(".temp_for_create_infiles.txt",'w+')
     outfile.write(in_data)
     outfile.close()

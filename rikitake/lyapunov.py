@@ -20,7 +20,7 @@ def calculate_lyapunov(filename_1, filename_2,N_calc):
     data_2, mu_2, k_2=read_data.get_data(filename_2,'2')
     lenght=len(data_1)
     try:
-      assert lenght==len(data_2) #raise assertin error
+      assert lenght==len(data_2)
       assert mu_1==mu_2
       assert k_1==k_2
     except AssertionError:
@@ -34,7 +34,7 @@ def calculate_lyapunov(filename_1, filename_2,N_calc):
     cumulative_sum=0 ####
     print("Lyapunov exponents calculation:", N_calc, "/3")
     for i in Progress.range(1, lenght):
-        cumulative_sum+=log_diff_ratio[i]####
+        cumulative_sum+=log_diff_ratio[i]
         lyaps[i]=cumulative_sum/i
     return lyaps
 
@@ -64,8 +64,8 @@ def plot_exponents(simulation_ID, save_dir):
     return fig, values
 
 def lyapunov(save_dir):
-    """This function leads all the process, calculating lyapunov exponents, creating the image and then saves it as 'simulation_ID_lyap_exp.png'
-    The saves the estimated lyapunov exponents in 'simulation_ID_lyapunov_exp.dat' file."""
+   """This function leads all the process, calculating lyapunov exponents, creating the image and then saves it as 'simulation_ID_lyap_exp.png'
+   The saves the estimated lyapunov exponents in 'simulation_ID_lyapunov_exp.dat' file."""
    simulation_ID=read_data.get_simulation_ID(save_dir)   
    fig, exp_values=plot_exponents(simulation_ID, save_dir)
    fig.savefig(save_dir+'/'+simulation_ID+"_lyap_exp.png", bbox_inches='tight')

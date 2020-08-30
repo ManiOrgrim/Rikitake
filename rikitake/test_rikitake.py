@@ -11,6 +11,8 @@ import hypothesis.strategies as st
 import os
 import integrator
 import read_data
+import hashlib
+
 
 
 
@@ -46,8 +48,9 @@ def test_steady_state(mu, k, sign):
     x2_0=sign/k
     y1_0=mu*k**2
     y2_0=mu*k**-2
+    print("culo")
     dynamo_test=integrator.dynamo(mu,k,30, [x1_0, x2_0, y1_0], "test_output.csv", 2**-8)
-    dynamo_test.evolve()
+    dynamo_test.evolve(0)
     dynamo_test.write_results()
     t, x1, x2,  y1, y2, mu, k=read_data.get_data("test_output.csv", '1')
     assert (abs(x1[-1]-x1_0)<2*10**-6)
@@ -55,4 +58,53 @@ def test_steady_state(mu, k, sign):
     assert (abs(y1[-1]-y1_0)<2*10**-6)
     assert (abs(y2[-1]-y2_0)<2*10**-6)
     os.remove("test_output.csv")
+    
+@given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2)) #BUG when pytest runs this test, it never stops, without giving error
+def test_consistency(mu, k):
+       dynamo_test_1=integrator.dynamo(mu, k, 1000, [1, 1, 1], "test_consistency1.csv", 2**-8)
+       dynamo_test_1.evolve(0)
+       dynamo_test_1.write_results()
+       dynamo_test_2=integrator.dynamo(mu, k, 1000, [1, 1, 1], "test_consistency2.csv", 2**-8)
+       dynamo_test_2.evolve(0)
+       dynamo_test_2.write_results()
+       def md5(fname):
+          """hash function appropriate for big data"""
+          hash_md5 = hashlib.md5()
+          with open(fname, "rb") as f:
+             for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+          return hash_md5.hexdigest()
+       assert md5("test_consistency1.csv")==md5("test_consistency2.csv")
+       os.remove("test_consistency2.csv")
+       os.remove("test_consistency1.csv")
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
     

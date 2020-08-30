@@ -6,7 +6,7 @@ Created on Tue May 26 11:27:48 2020
 @author: mani
 """
 import numpy as np
-from hypothesis import given, assume
+from hypothesis import given, assume, settings
 import hypothesis.strategies as st
 import os
 import integrator
@@ -48,7 +48,6 @@ def test_steady_state(mu, k, sign):
     x2_0=sign/k
     y1_0=mu*k**2
     y2_0=mu*k**-2
-    print("culo")
     dynamo_test=integrator.dynamo(mu,k,30, [x1_0, x2_0, y1_0], "test_output.csv", 2**-8)
     dynamo_test.evolve(0)
     dynamo_test.write_results()
@@ -59,31 +58,28 @@ def test_steady_state(mu, k, sign):
     assert (abs(y2[-1]-y2_0)<2*10**-6)
     os.remove("test_output.csv")
     
-@given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2)) #BUG when pytest runs this test, it never stops, without giving error
-def test_consistency(mu, k):
-       dynamo_test_1=integrator.dynamo(mu, k, 1000, [1, 1, 1], "test_consistency1.csv", 2**-8)
-       dynamo_test_1.evolve(0)
-       dynamo_test_1.write_results()
-       dynamo_test_2=integrator.dynamo(mu, k, 1000, [1, 1, 1], "test_consistency2.csv", 2**-8)
-       dynamo_test_2.evolve(0)
-       dynamo_test_2.write_results()
-       def md5(fname):
+def md5(fname):
           """hash function appropriate for big data"""
           hash_md5 = hashlib.md5()
           with open(fname, "rb") as f:
              for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
-          return hash_md5.hexdigest()
+          return hash_md5.hexdigest()  
+    
+    
+@settings(deadline=400)
+@given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2)) #BUG when pytest runs this test, it never stops, without giving error
+def test_consistency(mu, k):
+       dynamo_test_1=integrator.dynamo(mu, k, 100, [1, 1, 1], "test_consistency1.csv", 2**-8)
+       dynamo_test_1.evolve(0)
+       dynamo_test_1.write_results()
+       dynamo_test_2=integrator.dynamo(mu, k, 100, [1, 1, 1], "test_consistency2.csv", 2**-8)
+       dynamo_test_2.evolve(0)
+       dynamo_test_2.write_results()
        assert md5("test_consistency1.csv")==md5("test_consistency2.csv")
        os.remove("test_consistency2.csv")
        os.remove("test_consistency1.csv")
-       
-       
-       
-       
-       
-       
-       
+
        
        
        

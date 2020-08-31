@@ -26,7 +26,9 @@ def generate_image(filename):
     
 def image_creator(save_dir):
    """This function generates the four 'path/to/image.png' string to where images will be saved.
-   Each one is created by the function 'generate_image'."""
+   Each one is created by the function 'generate_image'.
+   RETURNS:
+       TRUE if the process finished without errors."""
    simulation_ID=read_data.get_simulation_ID(save_dir)  
    print("Image generation")
    files=[save_dir+'/'+simulation_ID+'_'+str(i)+'.csv' for i in range(4)]

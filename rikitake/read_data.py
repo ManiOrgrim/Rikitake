@@ -10,7 +10,12 @@ import sys
 from plumbum import colors
 
 def get_param_values(line):
-    """this function takes the parameter values form the specific string in the input file"""
+    """this function takes the parameter values from the specific string in the input file.
+    PARAMETERS:
+        line: (string) String from wich the parameters mu and k will be read.
+    RETRNS:
+        mu  : (float) Value of mu.
+        k   : (float) Value of k"""
 
     mu=float(line.split()[1])
     k=float(line.split()[3])
@@ -27,7 +32,16 @@ def get_data(filename, form):
 
 def get_data_format1(filename):
     """this function opens the input file and read the lines containing data.
-    Returns a list of floats for time and variables"""
+    PARAMETERS:
+            filename: (string) name of the file from which informations will be read.
+    RETURNS:
+            t       : (float[N_steps]) series of time values
+            x1      : (float[N_steps]) series of x1 values
+            x2      : (float[N_steps]) series of x2 values
+            y1      : (float[N_steps]) series of y1 values
+            y2      : (float[N_steps]) series of y2 values
+            mu      : (float) value of mu
+            k       : (float) value fo k """
     try:
        infile=open(filename, 'r')
     except OSError:
@@ -52,7 +66,13 @@ def get_data_format1(filename):
 
 def get_data_format2(filename):
     """this function opens the input file and read the lines containing data.
-    Returns a list of floats for time and variables"""
+    differs from get_data_format1 in the format (but not in the contents) of the output
+    PARAMETERS:
+        filename: (string) name of the file from which informations will be read.
+    RETURNS:
+        data    : (float[N_series, 4]) value of [x1, x2, y1, y2] at each time step
+        mu      : (float) value of mu
+        k       : (float) value fo k """
     try:
        infile=open(filename, 'r')
     except OSError:
@@ -69,6 +89,11 @@ def get_data_format2(filename):
     return data, mu, k
 
 def get_simulation_ID(save_dir):
+    """This function gets the simultaion_ID for this particular integration.
+    PARAMETERS:
+        save_dir     : (string) Directory in which the 'input_values.txt' file is stored.
+    RETURNS:
+        simulation_ID: (string) String object reporting simulation_ID."""
     try:
        in_file=open(save_dir+"/input_values.txt",'r')
     except OSError:

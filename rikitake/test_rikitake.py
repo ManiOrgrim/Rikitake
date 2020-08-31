@@ -18,12 +18,15 @@ import hashlib
 
 @given(mu=st.floats(10e-100,1e+99), k=st.floats(10e-100, 10e+99))
 def test_parameters (mu, k):
+    """This function test if informations in output files are written correctly"""
+    
     A_test=mu*(k**2-k**-2)
     dynamo_test=integrator.dynamo(mu, k, 10, [1, 1, 1], "filename", 2**-8)
     assert dynamo_test.A==A_test
     
 @given(x2_init=st.floats(), x1_init=st.floats(), y1_init=st.floats(), N_steps=st.integers(1,10e+7))
 def test_initial_conditions (x1_init, x2_init, y1_init, N_steps):
+    """This function tests if the integration proceed without problems"""
     assume (not np.isnan(x1_init ))
     assume (not np.isnan(x2_init ))
     assume (not np.isnan(y1_init ))
@@ -39,7 +42,7 @@ def test_initial_conditions (x1_init, x2_init, y1_init, N_steps):
     
 @given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2), sign=st.booleans())
 def test_steady_state(mu, k, sign):
-    #assume(abs(mu*(k**2-k**-2))<10**2)
+    """This function tests if the steady states are mantained"""
     if sign:
         sign=+1
     else:
@@ -70,6 +73,7 @@ def md5(fname):
 @settings(deadline=400)
 @given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2))
 def test_consistency(mu, k):
+       """This functions tests if two independent integrations produce the same output given the same input"""
        dynamo_test_1=integrator.dynamo(mu, k, 100, [1, 1, 1], "test_consistency1.csv", 2**-8)
        dynamo_test_1.evolve(0)
        dynamo_test_1.write_results()

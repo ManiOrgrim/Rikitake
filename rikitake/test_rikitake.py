@@ -68,7 +68,7 @@ def md5(fname):
     
     
 @settings(deadline=400)
-@given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2)) #BUG when pytest runs this test, it never stops, without giving error
+@given(mu=st.floats(0,1e+2), k=st.floats(1e-2, 1e+2))
 def test_consistency(mu, k):
        dynamo_test_1=integrator.dynamo(mu, k, 100, [1, 1, 1], "test_consistency1.csv", 2**-8)
        dynamo_test_1.evolve(0)

@@ -14,9 +14,17 @@ from plumbum import colors
 #we take in input: mu, k, Nsteps, initial conditions, simID
 class dynamo:
     """this class represents a single simulation.
-       states and parameters are stored"""
+       states and parameters are stored in internal variables."""
     
     def __init__(self, mu, k, N_steps, initial_conditions, outfile_name, dt):
+        """Initializer of dynamo class.
+        PARAMETERS:
+            mu                : (float) the mu parameter of rikitake dynamo equations
+            k                 : (float) the k parameter of rikitake dynamo equations
+            N_steps           : (int) Number of integration steps that the user wants to perform
+            initial_conditions: (float[3]) array storing the initial states of the system, in the order [x_1, x_2, y_1]
+            outfile_name      : (str) name of the file in wich the result of the integration will be stored
+            dt                : (float) size of the discretized time step."""
         self.mu=mu
         self.k=k
         self.A=self.mu*(self.k**2-self.k**-2) 
@@ -35,7 +43,9 @@ class dynamo:
         self.dt=dt
     
     def evolve (self, N_sim):
-        """This function performs the evolution of the states."""
+        """This function performs the evolution of the states.
+        PARAMETERS:
+            N_sim: (int) ranging from 0 to 3, it is the identifier of the simulation."""
         print("Integration ", N_sim+1, "/4")
         for i in Progress.range(1,self.N_steps):
             self.x1[i]=self.Evo_x1(i-1)
@@ -110,7 +120,9 @@ class dynamo:
         
     
 def generate_data(save_dir, dt):  
-   """This function leads the integration process and writes the data."""
+   """This function leads the integration process and writes the data.
+   RETURNS:
+       TRUE:  if the process ended without errors"""
    
    """reading all the needed parameters"""
    try:

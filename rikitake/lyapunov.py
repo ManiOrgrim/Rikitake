@@ -45,9 +45,8 @@ def get_results(simulation_ID, save_dir):
     lyaps=[calculate_lyapunov(filename[0],filename[i], i) for i in range(1,4)]
     results=[]
     for lyap in lyaps:
-        lenght_ten=int(len(lyap)/100)
-        last_lyap=lyap[lenght_ten:]
-        mean_lyap=np.mean(last_lyap)
+        last_100lyap=lyap[-100:]
+        mean_lyap=np.mean(last_100lyap)
         results.append(mean_lyap)
     return results, lyaps
 
@@ -58,9 +57,12 @@ def plot_exponents(simulation_ID, save_dir):
     for i in range(3):
         subplots[i].plot(series[i], color='r')
         subplots[i].set_xlabel("integration steps")
-        subplots[i].set_ylabel("Lyapuniov exponent estmate")
-        subplots[i].hlines(values[i], 0, len(series[i]), label=str(values[i]))
+        subplots[i].set_ylabel("Lyapuniov exponent estimate")
+        subplots[i].hlines(values[i], 0, len(series[i]), label=str(round(values[i],2)))
         subplots[i].legend()
+    subplots[0].set_title('Direction x_1')
+    subplots[1].set_title('DIrection x_2')
+    subplots[2].set_title('Direction y_1')
     return fig, values
 
 def lyapunov(save_dir):

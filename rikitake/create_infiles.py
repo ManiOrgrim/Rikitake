@@ -9,13 +9,14 @@ Created on Wed May 20 16:52:18 2020
 import plumbum.cli.terminal as terminal
 import sys
 import os
-import warnings
 from plumbum import colors
 
 def read_input():
     """This function reads the temporary file '.temp_for_create_infiles.txt';
     Reading the values of the parameters, the number of integration steps to  perform,
-    the initial conditions and the simulation_ID"""
+    the initial conditions and the simulation_ID
+    RETURNS:
+        split_string: (string[7]) an array containing the string values of [mu, k, N_steps, x1_0, x2_0, y1_0, simulation_ID] """
     try:
        in_file=open(".temp_for_create_infiles.txt",'r')
     except OSError:
@@ -34,7 +35,8 @@ def read_input():
 
 def ask_for_data():
     """This function asks the user the values of parameters, number of integration steps,
-    initial conditions and simulation_ID. Then creates a '.temp_for_create_infiles.txt' file to store them."""
+    initial conditions and simulation_ID. Then creates a '.temp_for_create_infiles.txt' file to store them.
+    This file will be used by other functions to read the data"""
     while (True):
        in_data=terminal.prompt("Type the data in the form 'mu k N_steps x1_0 x2_0 y1_0 simulation_identifier")
        split_values=in_data.split()
@@ -77,7 +79,7 @@ def create_infile(save_dir):
     then creates a 'simulation_ID.txt' file in wich the necessary values for the integration are stored.
     Each line of this file is in the form 'mu k N_steps initial conditions simulation_ID'.
     The first line shows the values as given in input
-    In the following three the initial conditions are slightly changed in order to calcuate lyapunov exponentes."""
+    In the following three the initial conditions are slightly changed in order to calcuate lyapunov exponents."""
     ask_for_data()
     in_data=read_input()
     mu=in_data[0]

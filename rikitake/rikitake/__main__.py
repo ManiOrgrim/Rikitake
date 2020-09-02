@@ -18,7 +18,7 @@ class Rikitake(cli.Application):
     and calculates the Lyapunov Exponents of the particular obtained solution."""
     
     PROGNAME = "rikitake"
-    VERSION ="0.1"
+    VERSION ="1.0"
     
     save_dir=os.getcwd() #if not changed, results will be saved in currently working directory
     dt=2**-8

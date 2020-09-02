@@ -14,5 +14,6 @@ These equations depend on four variables X<sub>1</sub>, X<sub>2</sub>, Y<sub>1</
 ![The Rikitake dynamo equations](https://github.com/ManiOrgrim/Rikitake/blob/master/Images/Rikitake_dynamo_eqs.png?raw=true)
 It is a system of four non-linear coupled differential equations that may show chaotic behaviour. A measure of the chaoticity of a system is given by the Lyapunov exponents (see, for example, [the relative pagee in Scholarpedia](http://www.scholarpedia.org/article/Lyapunov_exponent)).
 
-Integration and calculation
+Integration of the equations
 ==========================
+The integration is made using a 6<sup>th</sup> order Runge-Kutta integration algorithm.

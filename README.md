@@ -1,9 +1,11 @@
 RIKITAKE
 ========
 
-Rikitake is a python program that integrates the Rikitake dynamo
-differential equation sysytem and calculates the Lyapunov exponents of
-the system using the obtained solution.
+Rikitake is a python command line interface program able to:
+- Integrate the Rikitake Dynamo differential equation system
+- Calculate the gratest lyapunov exponent of the particular solution obtained
+- Generate plots with dynamical informations about the system
+
 
 The Rikitake dynamo 
 ===================

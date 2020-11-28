@@ -19,7 +19,7 @@ You can get Rikitake [here](https://github.com/ManiOrgrim/Rikitake). If you down
 In order to install and run Rikitake, you need Python v3 ([here](https://www.python.org/)) and pip3 ([here](https://pypi.org/project/pip/)).
 From your command line, run the command
 
-'''pip3 install -e path/to/rikitake'''
+~~~pip3 install -e path/to/rikitake
 
 where 'path/to/rikitake' should be replaced with the actual path of the rikitake folder in you local computer. When installation is complete, you can run Rikitake from any folder right in your command line, just by running the command:
 

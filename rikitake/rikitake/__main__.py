@@ -64,6 +64,7 @@ class Rikitake(cli.Application):
     def set_save_dir (self, path_to_dir):
         """Allows the user to specify the path in wich the results will be saved.
         If not specified results will be saved in current working directory."""
+        
         if path_to_dir not in os.listdir():
           os.mkdir(path_to_dir)
         self.save_dir=path_to_dir

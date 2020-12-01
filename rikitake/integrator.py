@@ -46,22 +46,22 @@ class dynamo:
         """This function performs the evolution of the states.
         PARAMETERS:
             N_sim: (int) ranging from 0 to 3, it is the identifier of the simulation."""
-        print("Integration ", N_sim+1, "/4")
+        print("Integration ", N_sim+1, "/2")
         for i in Progress.range(1,self.N_steps):
             self.x1[i]=self.Evo_x1(i-1)
             self.x2[i]=self.Evo_x2(i-1)
             self.y1[i]=self.Evo_y1(i-1)
             self.time[i]=i*self.dt
         self.y2=self.y1-self.A
-    """The following functions perform a single step of the 6th order Runge-Kutta integration for each variable."""
+    """The following functions perform a single step of the 4th order Runge-Kutta integration for each variable."""
     def Evo_x1(self,i):
-        return (self.x1[i]+self.dt*(self.k1x1(i)+self.k2x1(i)+self.k3x1(i)+self.k4x1(i)+self.k5x1(i)+self.k6x1(i))/6)
+        return (self.x1[i]+self.dt*(self.k1x1(i)+2*self.k2x1(i)+2*self.k3x1(i)+self.k4x1(i))/6)
     def Evo_x2(self,i):
-        return (self.x2[i]+self.dt*(self.k1x2(i)+self.k2x2(i)+self.k3x2(i)+self.k4x2(i)+self.k5x2(i)+self.k6x2(i))/6)
+        return (self.x2[i]+self.dt*(self.k1x2(i)+2*self.k2x2(i)+2*self.k3x2(i)+self.k4x2(i))/6)
     def Evo_y1(self, i):
-        return (self.y1[i]+self.dt*(self.k1y1(i)+self.k2y1(i)+self.k3y1(i)+self.k4y1(i)+self.k5y1(i)+self.k6y1(i))/6)
+        return (self.y1[i]+self.dt*(self.k1y1(i)+2*self.k2y1(i)+2*self.k3y1(i)+self.k4y1(i))/6)
     
-    """The following functions calculate the 6th order RK factors"""
+    """The following functions calculate the 4th order RK factors"""
     def k1x1 (self, i):
         return (-self.mu*self.x1[i]+self.y1[i]*self.x2[i])
     def k1x2 (self,i):
@@ -70,39 +70,25 @@ class dynamo:
         return(1-self.x1[i]*self.x2[i])
         
     def k2x1 (self, i):
-        return (-self.mu*(self.x1[i]+self.dt*self.k1x1(i)/6.)+(self.y1[i]+self.dt*self.k1y1(i)/6)*(self.x2[i]+self.dt*self.k1x2(i)/6.))
+        return (-self.mu*(self.x1[i]+0.5*self.dt*self.k1x1(i))+(self.y1[i]+0.5*self.dt*self.k1y1(i))*(self.x2[i]+0.5*self.dt*self.k1x2(i)))
     def k2x2 (self,i):
-        return (-self.mu*(self.x2[i]+self.dt*self.k1x2(i)/6.)+((self.y1[i]+self.dt*self.k1y1(i)/6-self.A)*(self.x1[i]+self.dt*self.k1x1(i)/6.)))
+        return (-self.mu*(self.x2[i]+0.5*self.dt*self.k1x2(i))+((self.y1[i]+0.5*self.dt*self.k1y1(i)-self.A)*(self.x1[i]+0.5*self.dt*self.k1x1(i))))
     def k2y1 (self,i):
-        return(1.-(self.x1[i]+self.dt*self.k1x1(i)/6.)*(self.x2[i]+self.dt*self.k1x2(i)/6.))
+        return(1.-(self.x1[i]+0.5*self.dt*self.k1x1(i))*(self.x2[i]+0.5*self.dt*self.k1x2(i)))
         
     def k3x1 (self, i):
-        return (-self.mu*(self.x1[i]+self.dt*self.k2x1(i)/3.)+(self.y1[i]+self.dt*self.k2y1(i)/3)*(self.x2[i]+self.dt*self.k2x2(i)/3.))
+        return (-self.mu*(self.x1[i]+0.5*self.dt*self.k2x1(i))+(self.y1[i]+0.5*self.dt*self.k2y1(i))*(self.x2[i]+0.5*self.dt*self.k2x2(i)))
     def k3x2 (self,i):
-        return (-self.mu*(self.x2[i]+self.dt*self.k2x2(i)/3.)+((self.y1[i]+self.dt*self.k2y1(i)/3-self.A)*(self.x1[i]+self.dt*self.k2x1(i)/3.)))
+        return (-self.mu*(self.x2[i]+0.5*self.dt*self.k2x2(i))+((self.y1[i]+0.5*self.dt*self.k2y1(i)-self.A)*(self.x1[i]+0.5*self.dt*self.k2x1(i))))
     def k3y1 (self,i):
-        return(1.-(self.x1[i]+self.dt*self.k2x1(i)/3.)*(self.x2[i]+self.dt*self.k2x2(i)/3.))
+        return(1.-(self.x1[i]+0.5*self.dt*self.k2x1(i))*(self.x2[i]+0.5*self.dt*self.k2x2(i)))
         
     def k4x1 (self, i):
-        return (-self.mu*(self.x1[i]+0.5*self.dt*self.k3x1(i))+(self.y1[i]+0.5*self.dt*self.k3y1(i))*(self.x2[i]+0.5*self.dt*self.k3x2(i)))
+        return (-self.mu*(self.x1[i]+self.dt*self.k3x1(i))+(self.y1[i]+self.dt*self.k3y1(i))*(self.x2[i]+self.dt*self.k3x2(i)))
     def k4x2 (self,i):
-        return (-self.mu*(self.x2[i]+0.5*self.dt*self.k3x2(i))+((self.y1[i]+0.5*self.dt*self.k3y1(i)-self.A)*(self.x1[i]+0.5*self.dt*self.k3x1(i))))
+        return (-self.mu*(self.x2[i]+self.dt*self.k3x2(i))+((self.y1[i]+self.dt*self.k3y1(i)-self.A)*(self.x1[i]+self.dt*self.k3x1(i))))
     def k4y1 (self,i):
-        return(1.-(self.x1[i]+0.5*self.dt*self.k3x1(i))*(self.x2[i]+0.5*self.dt*self.k3x2(i)))
-
-    def k5x1 (self, i):
-        return (-self.mu*(self.x1[i]+2*self.dt*self.k4x1(i)/3)+(self.y1[i]+2*self.dt*self.k4y1(i)/3)*(self.x2[i]+2*self.dt*self.k4x2(i)/3))
-    def k5x2 (self,i):
-        return (-self.mu*(self.x2[i]+2*self.dt*self.k4x2(i)/3)+((self.y1[i]+2*self.dt*self.k4y1(i)/3-self.A)*(self.x1[i]+2*self.dt*self.k4x1(i)/3)))
-    def k5y1 (self,i):
-        return(1.-(self.x1[i]+2*self.dt*self.k4x1(i))*(self.x2[i]+2*self.dt*self.k4x2(i)/3))
-        
-    def k6x1 (self, i):
-        return (-self.mu*(self.x1[i]+5*self.dt*self.k5x1(i)/6.)+(self.y1[i]+5*self.dt*self.k5y1(i)/6)*(self.x2[i]+5*self.dt*self.k5x2(i)/6.))
-    def k6x2 (self,i):
-        return (-self.mu*(self.x2[i]+5*self.dt*self.k5x2(i)/6.)+((self.y1[i]+5*self.dt*self.k5y1(i)/6-self.A)*(self.x1[i]+5*self.dt*self.k5x1(i)/6.)))
-    def k6y1 (self,i):
-        return(1.-(self.x1[i]+5*self.dt*self.k5x1(i)/6.)*(self.x2[i]+5*self.dt*self.k5x2(i)/6.))
+        return(1.-(self.x1[i]+self.dt*self.k3x1(i))*(self.x2[i]+self.dt*self.k3x2(i)))
        
         
     def write_results(self):
@@ -116,9 +102,10 @@ class dynamo:
         for i in range(self.N_steps):
             line=str(self.dt*i)+';'+str(self.x1[i])+';'+str(self.x2[i])+';'+str(self.y1[i])+';'+str(self.y2[i])+'\n'
             outfile.write(line)
+        outfile.close()
         
         
-    
+
 def generate_data(save_dir, dt):  
    """This function leads the integration process and writes the data.
    RETURNS:
@@ -139,7 +126,7 @@ def generate_data(save_dir, dt):
            mu=float(values[0])
            k=float(values[1])
            N_steps=int(values[2])
-           initial_conditions=[float(val) for val in values[3:6]]
+           initial_conditions=[float(value) for value in values[3:6]]
            simulation_ID=values[6]
         except ValueError or IndexError:
            print(colors.red|"'input_values.txt' is not written as expected.")
@@ -155,4 +142,6 @@ def generate_data(save_dir, dt):
         
         N_sim+=1
    return True
+    	   
+
     	   

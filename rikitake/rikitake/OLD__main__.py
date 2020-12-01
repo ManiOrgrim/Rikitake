@@ -11,21 +11,21 @@ import image_creator
 import lyapunov
 
 
+
 class Rikitake(cli.Application):
     """This program integrates the Rikitake Dynamo differential equation system, 
     generates the images of the phase space projections
     and calculates the Lyapunov Exponents of the particular obtained solution."""
     
     PROGNAME = "rikitake"
-    VERSION ="2.0.0"
+    VERSION ="1.0"
     
     save_dir=os.getcwd() #if not changed, results will be saved in currently working directory
     dt=2**-8
     
     integration_completed=False
     images_created=False
-    lyapuov= 'not calculated'
-    
+    lyap_exp_calculated=False
 
     def main (self):
         """This function leads the exectution of the program."""
@@ -35,22 +35,17 @@ class Rikitake(cli.Application):
             self.there_is_not_infile()
         if not self.dont_perform_integration:
            self.integration_completed=integrator.generate_data(self.save_dir, self.dt)
-        if not self.dont_calculate_lyapunov:
-           self.lyap_exp_calculated=lyapunov.lyapunov(self.save_dir)
         if not self.dont_generate_images:
            self.images_created=image_creator.image_creator(self.save_dir)
-        if (self.integration_completed and self.images_created and self.verbose):
+        if not self.dont_calculate_lyapunov:
+           self.lyap_exp_calculated=lyapunov.lyapunov(self.save_dir)
+        if (self.integration_completed and self.images_created and self.lyap_exp_calculated and self.verbose):
             print(colors.green|"Process completed.")
         if(self.verbose):
             print(colors.green|"These processes have been performed:")
             print(colors.green|"INTEGRATION:",self.integration_completed)
-            print(colors.green|"LYAPUNOV EPONENT:" ,self.lyapunov)
-      
             print(colors.green|"IMAGE GENERATION:",self.images_created)
-        if(self.alert):
-            duration = 1  # seconds
-            freq = 441  # Hz
-            os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+            print(colors.green|"LYAPUNOV EXPONENTS:",self.lyap_exp_calculated)
         if(terminal.ask("Run another simulation?")):
             print("Please rename/save elsewhere the present 'input_values.txt' if you want to change it for this simulation.")
             self.main()
@@ -58,12 +53,10 @@ class Rikitake(cli.Application):
    
     dont_perform_integration=cli.Flag(["NOint","NOintegration"], help ="If given integration will not be performed.")
     dont_generate_images=cli.Flag(["NOimg","NOimages"],help="If given phase space images will not be generated.")
-
     dont_calculate_lyapunov=cli.Flag(["NOly","NOlyapunov"], help="If given lyapunov exponents calculation will not be performed.")
     
-    
     verbose = cli.Flag(["v", "verbose"], help = "If given the program will be very talkative.")
-    alert= cli.Flag(["a", "alarm"], help="If given the program will ring an alert when it finishes running.")
+   
     
             
     
@@ -71,6 +64,7 @@ class Rikitake(cli.Application):
     def set_save_dir (self, path_to_dir):
         """Allows the user to specify the path in wich the results will be saved.
         If not specified results will be saved in current working directory."""
+        
         if path_to_dir not in os.listdir():
           os.mkdir(path_to_dir)
         self.save_dir=path_to_dir

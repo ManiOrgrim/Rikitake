@@ -10,6 +10,7 @@ import plumbum.cli.terminal as terminal
 import sys
 import os
 from plumbum import colors
+import perturbation
 
 def read_input():
     """This function reads the temporary file '.temp_for_create_infiles.txt';
@@ -87,21 +88,16 @@ def create_infile(save_dir):
     N_steps=in_data[2]
     """Creation of slightly different initial conditions."""
     initial_condition=[float(X) for X in in_data[3:6]]
-    initial_condition1=[cond for cond in initial_condition]
-    initial_condition1[0]+=2**-5
-    initial_condition2=[cond for cond in initial_condition]
-    initial_condition2[1]+=2**-5
-    initial_condition3=[cond for cond in initial_condition]
-    initial_condition3[2]+=2**-5
-    initial_conditions=[initial_condition, initial_condition1,initial_condition2,initial_condition3]
+    perturbed_initial_condition=perturbation.perturbed_start(initial_condition, float(mu), float(k), 2**-32) #original value of factor: 2**-4
+    initial_conditions=[initial_condition, perturbed_initial_condition]
+    print(initial_conditions)
     identifier=in_data[6]
     outfile=open(save_dir+"/input_values.txt",'w+')
     for condition in initial_conditions:
         outstring=str(mu)+' '+str(k)+' '+str(N_steps)+' '+str(condition[0])+' '+str(condition[1])+' '+str(condition[2])+' '+identifier+'\n'
         outfile.write(outstring)
     try:
-        os.remove(".temp_for_create_infiles.txt")
+        pass
+        #os.remove(".temp_for_create_infiles.txt")
     except FileNotFoundError:
         print(colors.red|"Could not remove '.temp_for_create_infiles.txt'. Maybe the file has been deleted alright or you don't have permissions. The process will go on")
-    
-

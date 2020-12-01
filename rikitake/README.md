@@ -58,13 +58,15 @@ y1_0	(float)	value of the initial state for function *y<sub>1<sub/>*
 sim_ID (string)	identifying string for the simulation.
 
 N_steps determines for how many time steps the integration will be performed. The default time step is *dt*=1/256=0.00390625 (arbitrary time units), if not specified by the user [see here](#errors). This means that the simultation will run until a time value *t*=*dt* * Nsteps, generating Nsteps points as solution. As Nsteps grows, the lyapunov exponent will converge better, but it will take more computation time. 
-simID functions as a "name" for the simulation: every file that Rikitake will generate will have this string as initial characters. 
+*simID* functions as a "name" for the simulation: every file that Rikitake will generate will have this string as initial characters. 
 **NOTE**: if you run two different simulations with the same simID, the data of the former one will be overwritten, so be careful!
 
-The answer should be given writing all the values separated by a space ' ' character. Press enter to confirm and let Rikitake run. Wait until it finishes, and we're done. Rikitake will ask you if you wish to perform another integration, asnwer as you wish.
-
+The answer should be given writing all the values separated by a space ' ' character. Press enter to confirm and let Rikitake run. This is the simplest way to use Rikitake.
 ##The outputs
+Rikitake creates as output eleven files:
+'
 
+'
 
 #Errors
 ====================

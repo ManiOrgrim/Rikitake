@@ -61,7 +61,7 @@ def ask_for_data():
            pass
        else:
            go_on1=terminal.ask(colors.yellow|"""The values of mu or k you choose may cause overflow issues.
-                        It is reccommended that 0< mu< 10^2 and 10^-2< k < 10^2.
+                        It is recommended that 0< mu< 10^2 and 10^-2< k < 10^2.
                         Continue anyway?""")
            if (go_on1):
                pass

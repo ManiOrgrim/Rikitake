@@ -43,6 +43,10 @@ You will be asked confirmation before pip proceeds in the uninstallation. Confir
 **NOTE:** When you uninstall Rikitake, all the files that it has created will -not- be deleted.
 
 
+
+
+
+
 #Running Rikitake: usage tutorial
 ====================
 **First use** 
@@ -62,8 +66,59 @@ N_steps determines for how many time steps the integration will be performed. Th
 **NOTE**: if you run two different simulations with the same simID, the data of the former one will be overwritten, so be careful!
 
 The answer should be given writing all the values separated by a space ' ' character. Press enter to confirm and let Rikitake run. This is the simplest way to use Rikitake.
+
+#How Rikitake works
+The Rikitake routine can be summarized in 4 steps:
+1. Input reading and creation
+2. Integration
+3. Estimate of the greatest Lyapunov exponent
+4. Image generation
+
+##Input reading and creation
+Within this step, Rikitake reads the input the user gave and creates some addition files that will help it run. 
+Let us assume the input is
+'
+3 4 1000000 1 2 3 foo
+'
+that is: 
+the parameters of this simulation are *µ*=3, *k*=4. We will perform 1000000 integration steps. The initial state is given by *x<sub>1<sub/>*=1, *x<sub>2<sub/>*=2, *y<sub>1<sub/>*=3. The simulation identifier is 'foo'.
+First, Rikitake will generate an initial condition adjacent to the given initial condition. This initial condition is found by: 
+1. calculating the Jacobian matrix of the system 
+2. finding the eigenvector *v* relative to the greatest eigenvalue of the Jacobian
+3. displacing the initial condition by a factor 2<sup>-32<sup/> along the direction given by *v*
+
+This creates a new initial condition, slightly different from the first one.
+Then, Rikitake will create a file, called 'input_values.txt'. As the name suggests, all the informations about the inputs will be stored here.
+The file consists in two lines. The first one is a direct replica of the input the user gave. The second line is the same as the first one, but the initial conditions written will be the perturbed ones. So, for our example input, the 'input_values.txt' file will look like this:
+
+'
+3 4 100000 1.0 2.0 3.0 foo
+3 4 100000 0.9999999999907341 1.999999999990734 2.9999999999352895 foo
+'
+##Integration
+In this step, Rikitake reads the ''input_values.txt'' file.
+Rikitake reads the first line, extracts the informations about the system and makes a Runge-Kutta 4th-order integration. ''N_Steps'' integrations are performed. 
+The results are saved in .csv format, in a file named ''SimID_0.csv'' (where the string ''SimID'' will be replaced by the simulation identifier given in input).
+The same is done reading the second line of ''input_values.txt'' creating a file named
+ ''SimID_1.csv''. More information about the structure of this output files [here](##The outputs).
+ 
+ So, in our example, we will have our integrations saved in the files "foo_0.csv" and 
+ "foo_1.csv".
+
+##Lyapunov exponents estimate
+In this step, Rikitake reads the results of the two simulations, and estimates the greatest Lyapunov exponent from these (the calculation procedure is rather complex and will be omitted here. You can find it in the [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop)). 
+Rikitake calcluates the estimated Lyapunov exponent for _each_ timestep of the integration, thus creating a time series of estimated Lyapunov exponents. Given the asymptotical definition of the Lyapunov exponents, the last values are supposed to be the most meaningful, so Rikitake will calculate the mean of the last 100<sup>1<sup/> values. This mean value will be stored in a file named "SimIDlyap.dat". The time-series of the Lyapunov exponents will be plotted and saved as an image named 
+"SimID_lyap_exp.png"
+
+In our example case, we will find the files "foo_lyap_exp.png" (below) and "foolyap.dat", with this content:
+'
+17.857228300870077 
+'
+
+<sup>1<sup/>: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
+ 
 ##The outputs
-Rikitake creates as output eleven files:
+Rikitake creates 16 output files:
 '
 
 '

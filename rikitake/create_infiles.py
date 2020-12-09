@@ -97,7 +97,7 @@ def create_infile(save_dir):
         outstring=str(mu)+' '+str(k)+' '+str(N_steps)+' '+str(condition[0])+' '+str(condition[1])+' '+str(condition[2])+' '+identifier+'\n'
         outfile.write(outstring)
     try:
-        pass
-        #os.remove(".temp_for_create_infiles.txt")
+        
+        os.remove(".temp_for_create_infiles.txt")
     except FileNotFoundError:
         print(colors.red|"Could not remove '.temp_for_create_infiles.txt'. Maybe the file has been deleted alright or you don't have permissions. The process will go on")

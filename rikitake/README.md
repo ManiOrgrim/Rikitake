@@ -129,19 +129,21 @@ As final step, Rikitake creates 12 plots, 6 for each integration. These plots ma
 6. A *x<sub>2<sub/>* vs *time* plot
 
 The file format is png. These image naming follows the structure "SimID_"+"simulation number_"+"plot subject", where simulation number is 0 for the unperturbed solution, 1 for the perturbed solution. : for our example case, we will have then:
-1. ~~~foo_0_3Dplot.png~~~
-2. ~~~foo_0_X1X2.png~~~
-3. ~~~foo_0_X1Y1.png~~~
-4. ~~~foo_0_Y1X2.png~~~
-5. ~~~foo_0_X1time.png~~~
-6. ~~~foo_0_X2time.png~~~
-7. ~~~foo_1_3Dplot.png~~~
-8. ~~~foo_1_X1X2.png~~~
-9. ~~~foo_1_X1Y1.png~~~
-10. ~~~foo_1_Y1X2.png~~~
-11. ~~~foo_1_X1time.png~~~
-12. ~~~foo_1_X2time.png~~~
+1. foo_0_3Dplot.png
+2. foo_0_X1X2.png
+3. foo_0_X1Y1.png
+4. foo_0_Y1X2.png
+5. foo_0_X1time.png
+6. foo_0_X2time.png
+7. foo_1_3Dplot.png
+8. foo_1_X1X2.png
+9. foo_1_X1Y1.png
+10. foo_1_Y1X2.png
+11. foo_1_X1time.png
+12. foo_1_X2time.png
 
+Below you can see the 3D phase space plot for our example case.
+![plot](foo_0_3Dplot.png)
 
 
 

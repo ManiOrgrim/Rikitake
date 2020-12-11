@@ -151,10 +151,22 @@ Below you can see the 3D phase space plot for our example case.
 1: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
  
 ##The outputs
-Rikitake creates 16 output files:
-'
+Resuming, Rikitake will create 17 files:
 
-'
+1. input_values.txt
+A text file containing two lines, each one holds the input informations for the program
+
+2. SimID_0.csv
+3. SimID_1.csv
+Two .csv files, with the results of the integration. The file labelled with '0' holds the results obtained integrating with the unperturbed initial condition; the file labelled with '1' holds the results obtained integrating with the perturbed initial condition.
+The first line records the values of *µ* and *k* of the integration. The second line is a header reporting the column structure. From the third line on, the integration results are stored in the format
+
+~~~
+time;x_1;x_2;y_1;y_2
+~~~
+
+
+
 
 #Errors
 ====================

@@ -114,6 +114,7 @@ In our example case, we will find the files "foo_lyap_exp.png" (below) and "fool
 '
 17.857228300870077 
 '
+![plot](foo_lyap_exp.png)
 
 <sup>1<sup/>: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
  

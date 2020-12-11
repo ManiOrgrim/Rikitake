@@ -22,7 +22,7 @@ def generate_image(filename):
     plt.xlabel('x2', fontsize=18)
     plt.ylabel('y1', fontsize=18)
     dot_position=filename.index('.')
-    image_filename=filename[:dot_position]+'X2Y1.png' #FIXME when simulationID has '.' char
+    image_filename=filename[:dot_position]+'_X2Y1.png' #FIXME when simulationID has '.' char
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
@@ -33,7 +33,7 @@ def generate_image(filename):
     plt.xlabel('x1', fontsize=18)
     plt.ylabel('y1', fontsize=18)
     dot_position=filename.index('.')
-    image_filename=filename[:dot_position]+'X1Y1.png' #FIXME when simulationID has '.' char
+    image_filename=filename[:dot_position]+'_X1Y1.png' #FIXME when simulationID has '.' char
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
@@ -44,7 +44,7 @@ def generate_image(filename):
     plt.xlabel('x1', fontsize=18)
     plt.ylabel('x2', fontsize=18)
     dot_position=filename.index('.')
-    image_filename=filename[:dot_position]+'X1X2.png' #FIXME when simulationID has '.' char
+    image_filename=filename[:dot_position]+'_X1X2.png' #FIXME when simulationID has '.' char
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
@@ -65,7 +65,7 @@ def generate_image(filename):
     plt.xlabel('tau', fontsize=18)
     plt.ylabel('X1', fontsize=18)
     dot_position=filename.index('.')
-    image_filename=filename[:dot_position]+'X1time.png' #FIXME when simulationID has '.' char
+    image_filename=filename[:dot_position]+'_X1time.png' #FIXME when simulationID has '.' char
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
@@ -76,7 +76,7 @@ def generate_image(filename):
     plt.xlabel('tau', fontsize=18)
     plt.ylabel('X2', fontsize=18)
     dot_position=filename.index('.')
-    image_filename=filename[:dot_position]+'X2time.png' #FIXME when simulationID has '.' char
+    image_filename=filename[:dot_position]+'_X2time.png' #FIXME when simulationID has '.' char
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     

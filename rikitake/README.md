@@ -57,7 +57,7 @@ Then you should be asked to input the values Rikitake will use to perform the in
 'k'	(float)	value of the *k* parameter
 'N_steps' (int)	number of integration steps you wish to perform 
 x1_0	(float)	value of the initial state for function *x<sub>1<sub/>*
-x2_0	(float)	value of the initial state for function *x<sub>1<sub/>*
+x2_0	(float)	value of the initial state for function *x<sub>2<sub/>*
 y1_0	(float)	value of the initial state for function *y<sub>1<sub/>*
 sim_ID (string)	identifying string for the simulation.
 
@@ -91,10 +91,10 @@ This creates a new initial condition, slightly different from the first one.
 Then, Rikitake will create a file, called 'input_values.txt'. As the name suggests, all the informations about the inputs will be stored here.
 The file consists in two lines. The first one is a direct replica of the input the user gave. The second line is the same as the first one, but the initial conditions written will be the perturbed ones. So, for our example input, the 'input_values.txt' file will look like this:
 
-'
+~~~
 3 4 100000 1.0 2.0 3.0 foo
 3 4 100000 0.9999999999907341 1.999999999990734 2.9999999999352895 foo
-'
+~~~
 ##Integration
 In this step, Rikitake reads the ''input_values.txt'' file.
 Rikitake reads the first line, extracts the informations about the system and makes a Runge-Kutta 4th-order integration. ''N_Steps'' integrations are performed. 
@@ -107,16 +107,46 @@ The same is done reading the second line of ''input_values.txt'' creating a file
 
 ##Lyapunov exponents estimate
 In this step, Rikitake reads the results of the two simulations, and estimates the greatest Lyapunov exponent from these (the calculation procedure is rather complex and will be omitted here. You can find it in the [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop)). 
-Rikitake calcluates the estimated Lyapunov exponent for _each_ timestep of the integration, thus creating a time series of estimated Lyapunov exponents. Given the asymptotical definition of the Lyapunov exponents, the last values are supposed to be the most meaningful, so Rikitake will calculate the mean of the last 100<sup>1<sup/> values. This mean value will be stored in a file named "SimIDlyap.dat". The time-series of the Lyapunov exponents will be plotted and saved as an image named 
+Rikitake calcluates the estimated Lyapunov exponent for _each_ timestep of the integration, thus creating a time series of estimated Lyapunov exponents. Given the asymptotical definition of the Lyapunov exponents, the last values are supposed to be the most meaningful, so Rikitake will calculate the mean of the last 100<sup>1<sup/> 
+values. This mean value will be stored in a file named "SimIDlyap.dat". The time-series of the Lyapunov exponents will be plotted and saved as an image named 
 "SimID_lyap_exp.png"
 
-In our example case, we will find the files "foo_lyap_exp.png" (below) and "foolyap.dat", with this content:
-'
-17.857228300870077 
-'
+In our example case, we will find the files "foo_lyap_exp.png" (below) 
 ![plot](foo_lyap_exp.png)
+and "foolyap.dat", with this content:
 
-<sup>1<sup/>: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
+
+~~~
+17.857228300870077 
+~~~
+##Image generation
+As final step, Rikitake creates 12 plots, 6 for each integration. These plots made for each integration are: 
+1. A 3-dimensional plot of the trajectory of the system in the phase-space
+2. A projection of the trajectory in the *x<sub>1<sub/>* *x<sub>2<sub/>* plain
+3. A projection of the trajectory in the *x<sub>1<sub/>* *y<sub>1<sub/>* plain
+4. A projection of the trajectory in the *x<sub>2<sub/>* *y<sub>1<sub/>* plain
+5. A *x<sub>1<sub/>* vs *time* plot
+6. A *x<sub>2<sub/>* vs *time* plot
+
+The file format is png. These image naming follows the structure "SimID_"+"simulation number_"+"plot subject", where simulation number is 0 for the unperturbed solution, 1 for the perturbed solution. : for our example case, we will have then:
+1. ~~~foo_0_3Dplot.png~~~
+2. ~~~foo_0_X1X2.png~~~
+3. ~~~foo_0_X1Y1.png~~~
+4. ~~~foo_0_Y1X2.png~~~
+5. ~~~foo_0_X1time.png~~~
+6. ~~~foo_0_X2time.png~~~
+7. ~~~foo_1_3Dplot.png~~~
+8. ~~~foo_1_X1X2.png~~~
+9. ~~~foo_1_X1Y1.png~~~
+10. ~~~foo_1_Y1X2.png~~~
+11. ~~~foo_1_X1time.png~~~
+12. ~~~foo_1_X2time.png~~~
+
+
+
+
+
+1: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
  
 ##The outputs
 Rikitake creates 16 output files:

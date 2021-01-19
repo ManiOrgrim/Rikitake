@@ -183,15 +183,61 @@ A dat file storing the value of the estimated greatest lyapunov exponent of the 
 A png image showing the lyapunov exponent estimate vs time plot.
 
 
-#Flags and switches
+#Switches
 =====
+Rikitake accepts several switches. These commands can be given right from command line when calling the program.
+- **Suppress images**: command: '--NOimg'. Suppress all image generation, except for the pyapunov exponent plot. 
+- **Suppress integration**: command: '--NOint'. Suppress the integration. Use this switch only 
+if you already have the integration results, as the rest of the code relies upon them.
+- **Suppress lyapunov exponent estimate**: command '--NOly'. Suppress the lyapunov exponent estimate. 
+The pyapunov exponent plot will also not be produced.
+- **Turn on the alarm**: command '-a', '--alarm'. Rikitake will produce an acustic signal when 
+the process is completed. The sound is very annoying, so handle with care.
+-  **Specify save directory**: command '--save-dir <path/to/dir>'. Specify the directory
+in which the results will be saved. 'path/to/dir' has to be replace with the actual path of the save directory.
+Default is current working directory.
+- **Set time step**: command '--set-dt <VALUE>'. Specify the time step for the integration. Replace
+the 'VALUE' in the command with the desired value (it must be a number). Default value is 2^-8.
+- **Verbose mode**: command '-v', '--verbose'. Rikitake will inform the user with more outputs
+in the standard output. Right now (v2.0.0) this flag doesn't really add much, but more will be implemented in the future. 
 
 
-#Errors
+
+
+#Errors and exit codes
 ====================
-Describe the error codes. Describe the typical bugs (or wrong usage) one can run into.
-Known issues. 
+When Rikitake terminates, wether it may be beacause the routine is over
+or errors have been arised, returns an exit code, that is a number associated with 
+a certain error in order to inform the user what happened. These exit codes are:
+0. Rikitake run succesfully without problems.
+1. Integration results could not be opened. The files are missing or 
+the user has not reading permissions. This may happen if the user uses the '--NOint'
+flag without a prior integration.
+2. "input_values.txt" could not be opened. This error happens wheter if the file has been deleted or if the user has not reading permissions.
+3. ".temp_for_create_infiles.txt" file could not be opened. '.temp_for_create_infiles.txt' is a temporary
+file that in which Rikitake holds some useful in-run informations, and deletes it when the run is over.
+This error happens wheter if the file has been deleted or if the user has not reading permissions.
+4. ".temp_for_create_infiles.txt" is not written as expected. Given that this file is directly created by Rikitake,
+is very hard for this error to be raised.
+5. "input_values.txt" is not written as expected. This happens when the layout of the file 
+doen't respect the indications **here**. Check if the two lines of the file have the same values (except 
+for the initial conditions).
+6. Integration results are not written as expected. In particular, the two result files
+may have different values of *μ*, *k* or a different number of integration steps.
 
-#Example usage
+**WARNINGS**: along with errors, Rikitake is provided with warnings for the user. 
+These warnings will not stop Rikitake, and it may run flawlessly. 
+These are usually due to the presence of unrecommended input values:
+- *N_steps* < 20000: This low number of integration steps could lead to the non-convergence of the lyapunov exponents.
+-  *μ* is not in the recommendend range of values, that is 0< μ< 10^2. This may cause
+overflow or undeflow issues during integration. 
+- *k* is not in the recommendend range of values, that is 10^(-2)< *k*< 10^(2). This may cause
+overflow or undeflow issues during integration. 
+- SimID containing '.' character . This causes issues when the images are saved, cropping the SimID in
+the file names (e.g. if the SimID is "abc.def", images will be saved as if the SimID was only
+"abc").
+
+
+Example usage
 =======
 

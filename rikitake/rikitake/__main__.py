@@ -17,7 +17,7 @@ class Rikitake(cli.Application):
     and calculates the Lyapunov Exponents of the particular obtained solution."""
     
     PROGNAME = "rikitake"
-    VERSION ="2.0.0"
+    VERSION ="2.0.1"
     
     save_dir=os.getcwd() #if not changed, results will be saved in currently working directory
     dt=2**-8
@@ -56,10 +56,10 @@ class Rikitake(cli.Application):
             self.main()
         else: sys.exit([0])
    
-    dont_perform_integration=cli.Flag(["NOint","NOintegration"], help ="If given integration will not be performed.")
-    dont_generate_images=cli.Flag(["NOimg","NOimages"],help="If given phase space images will not be generated.")
+    dont_perform_integration=cli.Flag(["NOint"], help ="If given integration will not be performed.")
+    dont_generate_images=cli.Flag(["NOimg"],help="If given phase space images will not be generated.")
 
-    dont_calculate_lyapunov=cli.Flag(["NOly","NOlyapunov"], help="If given lyapunov exponents calculation will not be performed.")
+    dont_calculate_lyapunov=cli.Flag(["NOly"], help="If given lyapunov exponents calculation will not be performed.")
     
     
     verbose = cli.Flag(["v", "verbose"], help = "If given the program will be very talkative.")

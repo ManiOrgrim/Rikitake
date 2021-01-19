@@ -97,8 +97,8 @@ def get_simulation_ID(save_dir):
     try:
        in_file=open(save_dir+"/input_values.txt",'r')
     except OSError:
-        print(colors.red|"Could not find input_values.txt file")
-        sys.exit([2]) #could not find input_values.txt
+        print(colors.red|"Could not open input_values.txt file")
+        sys.exit([2]) #could not open input_values.txt
     line=in_file.readline()
     split_line=line.split()
     simulation_ID=split_line[-1]

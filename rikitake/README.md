@@ -240,4 +240,25 @@ the file names (e.g. if the SimID is "abc.def", images will be saved as if the S
 
 Example usage
 =======
+We want to use Rikitake to estimate the Lyapunov exponents of Rikitake geodynamo
+with parameters *μ*=10, *k*= 2 and unperturbed initial conditions (1,1,1).
+We want to perform 100000 integration steps. We choose "foo" as SimID.
+Run Rikitake form command line:
+~~~
+rikitake
+~~~
+If a "input_values.txt" file already exists in the working directory the user 
+will be asked (twice) if they still wish to create a new input file and overwrite the previous one.
+If no such file already exists or if we answered 'yes' to the previous questions, 
+Rikitake will ask us for the input data. Type in the command line:
+~~~
+10 2 100000 1 1 1 foo
+~~~
+Press enter and let Rikitake do its job. Once all the steps are completed, 
+Rikitake will ask if the user wishes tu run another simulation. Answer as you wish.
+We now have all the output files in our directory. In particular the file foolyap.dat contains the value
+of the estimate of the Lyapunov exponent, that is, in our case, -0.2194168146332044.
 
+**This is all you need to know** in order to make Rikitake work. If you have any feedback or suggestion
+don't hesitate to contact me!
+Thanks for reading and have fun with Rikitake!

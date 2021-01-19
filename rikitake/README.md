@@ -47,8 +47,7 @@ You will be asked confirmation before pip proceeds in the uninstallation. Confir
 
 
 
-Running Rikitake: usage tutorial
-====================
+
 How Rikitake works
 ============
 The Rikitake routine can be summarized in 4 steps:
@@ -157,6 +156,7 @@ time;x_1;x_2;y_1;y_2
 ~~~
 3. SimID_0_3Dplot.png
 4. SimID_1_3Dplot.png
+
 Two png images showing the 3D plot of the trajectory of the solutions in the 
 *x<sub>1<sub/>* *x<sub>2<sub/>**y<sub>1<sub/>* space. 
 5. SimID_0_X1time.png
@@ -165,108 +165,26 @@ Two png images showing the *x<sub>1<sub/>* vs *time* plot for the solutions.
 7. SimID_0_X2time.png
 8. SimID_0_X2time.png
 Two png images showing the *x<sub>2<sub/>* vs *time* plot for the solutions.
+9. SimID_0_X1X2.png
+10. SimID_1_X1X2.png
+Two png images showing the projection of the trajectory in the 
+*x<sub>1<sub/>* *x<sub>2<sub/>* plane.
+11. SimID_0_X1Y1.png
+12. SimID_1_X1Y1.png
+Two png images showing the projection of the trajectory in the 
+*x<sub>1<sub/>* *y<sub>1<sub/>* plane.
+13. SimID_0_X2Y1.png
+14. SimID_1_X2Y1.png
+Two png images showing the projection of the trajectory in the 
+*x<sub>2<sub/>* *y<sub>1<sub/>* plane.
+15. SimIDlyap.dat
+A dat file storing the value of the estimated greatest lyapunov exponent of the system.
+16. SimID_lyap_exp.png
+A png image showing the lyapunov exponent estimate vs time plot.
 
 
-
-gg
-=========
-
-Within this step, Rikitake reads the input the user gave and creates some addition files that will help it run. 
-Let us assume the input is
-'
-3 4 1000000 1 2 3 foo
-'
-that is: 
-the parameters of this simulation are *µ*=3, *k*=4. We will perform 1000000 integration steps. The initial state is given by *x<sub>1<sub/>*=1, *x<sub>2<sub/>*=2, *y<sub>1<sub/>*=3. The simulation identifier is 'foo'.
-First, Rikitake will generate an initial condition adjacent to the given initial condition. This initial condition is found by: 
-1. calculating the Jacobian matrix of the system 
-2. finding the eigenvector *v* relative to the greatest eigenvalue of the Jacobian
-3. displacing the initial condition by a factor 2<sup>-32<sup/> along the direction given by *v*
-
-This creates a new initial condition, slightly different from the first one.
-Then, Rikitake will create a file, called 'input_values.txt'. As the name suggests, all the informations about the inputs will be stored here.
-The file consists in two lines. The first one is a direct replica of the input the user gave. The second line is the same as the first one, but the initial conditions written will be the perturbed ones. So, for our example input, the 'input_values.txt' file will look like this:
-
-~~~
-3 4 100000 1.0 2.0 3.0 foo
-3 4 100000 0.9999999999907341 1.999999999990734 2.9999999999352895 foo
-~~~
-##Integration
-
- 
- So, in our example, we will have our integrations saved in the files "foo_0.csv" and 
- "foo_1.csv".
-
-##Lyapunov exponents estimate
-
-
-
-
-##Image generation
-As final step, Rikitake creates 12 plots, 6 for each integration. These plots made for each integration are: 
-1. A 3-dimensional plot of the trajectory of the system in the phase-space
-2. A projection of the trajectory in the *x<sub>1<sub/>* *x<sub>2<sub/>* plain
-3. A projection of the trajectory in the *x<sub>1<sub/>* *y<sub>1<sub/>* plain
-4. A projection of the trajectory in the *x<sub>2<sub/>* *y<sub>1<sub/>* plain
-5. A *x<sub>1<sub/>* vs *time* plot
-6. A *x<sub>2<sub/>* vs *time* plot
-
-The file format is png. These image naming follows the structure "SimID_"+"simulation number_"+"plot subject", where simulation number is 0 for the unperturbed solution, 1 for the perturbed solution. : for our example case, we will have then:
-1. foo_0_3Dplot.png
-2. foo_0_X1X2.png
-3. foo_0_X1Y1.png
-4. foo_0_Y1X2.png
-5. foo_0_X1time.png
-6. foo_0_X2time.png
-7. foo_1_3Dplot.png
-8. foo_1_X1X2.png
-9. foo_1_X1Y1.png
-10. foo_1_Y1X2.png
-11. foo_1_X1time.png
-12. foo_1_X2time.png
-
-Below you can see the 3D phase space plot for our example case.
-![plot](foo_0_3Dplot.png)
-
-
-
-
-1: 100 is a totally arbitrary value. If you can suggest a more meaningful criterion, you're welcome to share it!
- 
-##The outputs
-Rikitake will create 17 files. Each of them will be explained here. In all of these file names 
-'SimID' will be replaced with the simulation ID you gave Rikitake.
-
-0. input_values.txt
-
-A 2-lines text file containing the input informations Rikitake needs in order to run. Then structure is 
-First line refers to the unperturbed solution, second line refers to the perturbed one. 
-The first two numbers represent respectively the values of the
-*µ* and *k* parameters. The third value is an integer and represents 
-the number of integration steps to be performed. These three initial values should be equal for both the unperturbed
-and perturbed solution. The following three numbers represent the values of the initial conditions, 
-in the order x_1, x_2, y_1. They should differ slightly between the two lines. The last word is the SimID, which should
-be equal between the two lines.
-An example of 'input_values.txt' file is 
-~~~
-5 10 100000 2.0 2.0 2.0 foo
-5 10 100000 2.000000000029093 2.000000000029093 1.999999999988681 foo
-
-~~~
-This file can be directly given as input from the user, as can easily be written by the user. 
-
-
-
-2. SimID_0.csv
-3. SimID_1.csv
-Two .csv files, with the results of the integration. The file labelled with '0' holds the results obtained integrating with the unperturbed initial condition; the file labelled with '1' holds the results obtained integrating with the perturbed initial condition.
-The first line records the values of *µ* and *k* of the integration. The second line is a header reporting the column structure. From the third line on, the integration results are stored in the format
-
-~~~
-time;x_1;x_2;y_1;y_2
-~~~
-
-
+#Flags and switches
+=====
 
 
 #Errors
@@ -274,4 +192,6 @@ time;x_1;x_2;y_1;y_2
 Describe the error codes. Describe the typical bugs (or wrong usage) one can run into.
 Known issues. 
 
+#Example usage
+=======
 

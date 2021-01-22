@@ -115,8 +115,8 @@ def generate_data(save_dir, dt):
    try:
        in_data=open(save_dir+"/input_values.txt",'r')
    except OSError:
-        print(colors.red|"Could not find input_values.txt file")
-        sys.exit([2]) #could not find input_values.txt    
+        print(colors.red|"Could not open input_values.txt file")
+        sys.exit([2]) #could not open input_values.txt    
    in_lines=in_data.readlines()
    N_sim=0
    for line in in_lines:

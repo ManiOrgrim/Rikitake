@@ -1,46 +1,66 @@
-RIKITAKE
-========
-
-Rikitake is a Python command line interface (CLI) software able to:
-- Integrate the Rikitake Dynamo differential equation system with a Runge-Kutta with user-specified parameters and initial conditions, generating machine-readable solutions 
-- Estimate the greatest Lyapunov exponent of the obtained solution 
-- Generate plots with informations about the dynamics of the system
-
-Each of these tasks can be performed separately, allowing the user to run the program with more flexibility.
+#RIKITAKE
 
 
+Rikitake is a Python command line interface (CLI) software that:
+- Integrates the Rikitake Dynamo differential equation system with a Runge-Kutta
+4<sup>th</sup> order algorithm with user-specified parameters and initial conditions, 
+generating machine-readable solutions; 
+- Estimates the greatest Lyapunov exponent of the obtained solution; 
+- Generates plots with informations about the dynamics of the system;
 
-Introduction: The Rikitake dynamo 
-===================
-The Rikitake Geodynamo is a model proposed by Tsuneji Rikitake in his paper ["Oscillations of a system of disk dynamos" in 1958](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/oscillations-of-a-system-of-disk-dynamos/CDDB16F7655910A13D299B1325A3239B) in order to describe and quantify Earth's magnetic field oscillation. The model consists in a linear system of three differential equations of three time dependant functions *x<sub>1<sub/>*, *x<sub>2<sub/>* and *y<sub>1<sub/>* and two parameters *μ* and *k*. Exaustive theoretical explaination about Rikitake dynamo can be found in the [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop) or in chapter 14 of ["Fractals and Chaos in Geology and Geophysics" by D. L. Turcotte](https://www.cambridge.org/it/academic/subjects/earth-and-environmental-science/solid-earth-geophysics/fractals-and-chaos-geology-and-geophysics-2nd-edition?format=PB). Within this guide, the basic notions about the system, as well as about dynamic systems, will be considered known and will not be explained. 
+Each of these tasks can be performed separately, 
+allowing the user to run the program with more flexibility.
 
 
 
-#Getting started: download and installation
+##Introduction: The Rikitake dynamo 
+
+The Rikitake Geodynamo is a model proposed by Tsuneji Rikitake in his paper 
+["Oscillations of a system of disk dynamos" in 1958](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/oscillations-of-a-system-of-disk-dynamos/CDDB16F7655910A13D299B1325A3239B) 
+in order to describe and quantify Earth's magnetic field oscillation. 
+The model consists in a linear system of three differential equations of three time
+ dependant functions *x<sub>1<sub/>*, *x<sub>2<sub/>* and *y<sub>1<sub/>* 
+ and two parameters *μ* and *k*. 
+ Exaustive theoretical explaination about Rikitake dynamo can be found in the 
+ [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop) 
+ or in chapter 14 of ["Fractals and Chaos in Geology and Geophysics" by D. L. Turcotte](https://www.cambridge.org/it/academic/subjects/earth-and-environmental-science/solid-earth-geophysics/fractals-and-chaos-geology-and-geophysics-2nd-edition?format=PB). 
+ Within this guide, the basic notions about the system, 
+ as well as about dynamic systems, will be considered known and will not be 
+ explained. 
+
+
+
+Getting started: download and installation
 ====================
-**add requirements**
-You can get Rikitake [here](https://github.com/ManiOrgrim/Rikitake). If you downloaded the .zip file, extract it and you should be able to find the "rikitake" folder in it. 
-In order to install and run Rikitake, you need Python v3 ([here](https://www.python.org/)) and pip3 ([here](https://pypi.org/project/pip/)).
+
+You can get Rikitake [here](https://github.com/ManiOrgrim/Rikitake). 
+Downloaded the .zip file, extract it and you should be able to find the "rikitake" 
+folder in it. You can also directly clone the git repository.
+In order to install and run Rikitake, you need Python v3 ([here](https://www.python.org/)) 
+and pip3 ([here](https://pypi.org/project/pip/)).
 From your command line, run the command
 
 ~~~
 pip3 install -e path/to/rikitake
 ~~~
 
-where 'path/to/rikitake' should be replaced with the actual path of the rikitake folder in your local computer. When installation is complete, you can run Rikitake from any folder right in your command line, just by running the command:
+where *path/to/rikitake* should be replaced with the actual path of the rikitake folder in your local computer.
+ When installation is complete, you can run Rikitake from any folder right
+ from your command line, just by running the command:
 
 ~~~
 rikitake
 ~~~
 
-If installation was successfull, Rikitake should run properly.
-
+If installation was successfull, Rikitake should run properly. 
 In order to uninstall rikitake, from your command line run the command
 ~~~
 pip3 uninstall rikitake
 ~~~
 You will be asked confirmation before pip proceeds in the uninstallation. Confirm and Rikitake will be correctly uninstalled.
-**NOTE:** When you uninstall Rikitake, all the files that it has created will -not- be deleted.
+
+
+**NOTE:** When you uninstall Rikitake, all the files that it has created will *not* be deleted.
 
 
 
@@ -51,15 +71,14 @@ You will be asked confirmation before pip proceeds in the uninstallation. Confir
 How Rikitake works
 ============
 The Rikitake routine can be summarized in 4 steps:
-1. Input creation and/or reading
-2. Integration
-3. Estimate of the greatest Lyapunov exponent
-4. Image generation
+1. Input creation and/or reading;
+2. Integration;
+3. Estimate of the greatest Lyapunov exponent;
+4. Image generation;
 
-From your terminal, get in the directory you want Rikitake to operate, and run the command
-'rikitake'. Then Rikitake should run and the user will be asked for inputs.
 
-##Input reading and creation
+Input reading and creation
+====
 There are two ways the user can specify the desired inputs to Rikitake: in-run and out-run. As first step, Rikitake will search for a 
 file called "input_values.txt" within the current wrking directory. If this file does't exist, the in-run input procedure will automatically start. If such file exists,
 the user will be asked "Do you want to create a new 'input_values.txt' file? (y/n)" via command line. If the answer is "y" ("yes") the in-run input procedure will be used,

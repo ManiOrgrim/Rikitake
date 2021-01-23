@@ -22,7 +22,7 @@ The model consists in a linear system of three differential equations of three t
  dependant functions *x<sub>1<sub/>*, *x<sub>2<sub/>* and *y<sub>1<sub/>* 
  and two parameters *μ* and *k*. 
  Exaustive theoretical explaination about Rikitake dynamo can be found in the 
- [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop) 
+ [supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf) 
  or in chapter 14 of ["Fractals and Chaos in Geology and Geophysics" by D. L. Turcotte](https://www.cambridge.org/it/academic/subjects/earth-and-environmental-science/solid-earth-geophysics/fractals-and-chaos-geology-and-geophysics-2nd-edition?format=PB). 
  Within this guide, the basic notions about the system, 
  as well as about dynamic systems, will be considered known and will not be 
@@ -147,7 +147,7 @@ that from now on will be referred to as _unperturbed state_,
 is given by the triplet (x1_0, x2_0, y1_0). The second one,
 that from now on will be referred to as _perturbed state_, 
 is obtained from the perturbed one with a procedure descripted in the
-[supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop). 
+[supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf). 
 
 
 #### Input file layout 
@@ -190,7 +190,7 @@ The user is also free to fully write its own input file
 In this step, Rikitake reads the *input_values.txt* file.
 Rikitake reads the first line, extracts the informations about the system and 
 makes a Runge-Kutta 4th-order integration (see 
-[supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop)
+[supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf)
  for details about the precise algorithm).
  *N_Steps* integration steps are performed. 
 The results are saved in .csv format, in a file named *SimID_0.csv*
@@ -206,7 +206,7 @@ named
 In this step, Rikitake reads the results of the two simulations
  and estimates the greatest Lyapunov exponent from these 
  (the calculation procedure is rather complex and will be omitted here. 
- You can find it in the [supplementary material](https://www.youtube.com/watch?v=dQw4w9WgXcQ&app=desktop)). 
+ You can find it in the [supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf). 
 Rikitake calculates the estimated Lyapunov exponent for _each_ timestep of the 
 integration, thus creating a time series of estimated Lyapunov exponents. 
 Given the asymptotical definition of the Lyapunov exponents, 
@@ -364,7 +364,6 @@ but more will be implemented in the future.
 
 
 # Errors and exit codes
-====================
 When Rikitake terminates, wether it may be beacause the routine is over
 or errors have been arised, returns an exit code, that is a number associated with 
 a certain error in order to inform the user what happened. These exit codes are:
@@ -419,10 +418,77 @@ Rikitake will ask us for the input data. Type in the command line:
 10 2 100000 1 1 1 foo
 ~~~
 Press enter and let Rikitake do its job. Once all the steps are completed, 
-Rikitake will ask if the user wishes tu run another simulation. Answer as you wish.
-We now have all the output files in our directory. In particular the file foolyap.dat contains the value
+Rikitake will ask if the user wishes to run another simulation. Answer as you wish.
+We now have all the output files in our directory. In particular the file *foolyap.dat*
+ contains the value
 of the estimate of the Lyapunov exponent, that is, in our case, -0.2194168146332044.
 
 **This is all you need to know** in order to make Rikitake work. If you have any feedback or suggestion
 don't hesitate to contact me!
 Thanks for reading and have fun with Rikitake!
+
+# The file structure of Rikitake
+The structure of *Rikitake* is the following:
+
+**Rikitake**
+  * `rikitake`
+     - `__init__.py`
+     - `__main__.py`
+  * `create_infiles.py`
+  * `image_creator.py`
+  * `integrator.py`
+  * `lyapunov.py`
+  * `perturbation.py`
+  * `read_data.py`
+  * `setup.py`
+
+Each of these files will be presented here.
+###   \_\_init\_\_.py (in rikitake folder)
+Empty file. It's presence is necessary in order to have a successfull installation.
+### \_\_main\_\_.py (in rikitake folder)
+This script leads the proper execution of the program. 
+Its main feature is the application-class `Rikitake`, whose method `main`
+runs all along the execution of the program and eventually calling the other 
+scripts.
+In the `Rikitake` class are also defined the switches and three functions 
+(` there_is_infile`,`there_is_not_infile`,`create_infile`) for the 
+input management.
+### create\_infiles.py
+In this script are defined the functions that perform the *in-run* input creation.
+This script is called directly by the `create_infile` function in file `__main__.py`.
+
+### image\_creator.py
+This script leads the image generation process. the function `image_creator` is directly
+called by `main` function in \_\_main\_\_.py.
+
+### integrator.py
+This script leads the integration process. It defines the class "dynamo", that 
+stores a sigle simulation. Its internal variables store the simulation parameters and
+the x1,x2,y1, y2 time series. Its internal methods are `evolve`, that performs the actual integration,
+and a set of functions `Evo_x1`, `Evo_x2`, `Evo_y1`; `k1x1`, `k1x2`, `k1y1`,...,
+`k4x1`, `k4x2`, `k4y1` to calculate the Runge-Kutta factors.
+The method `generate_data` leads the process and is directly called in \_\_main\_\_.py.
+
+### lyapunov.py
+This script leads the calculation of the Lyapunuv exponents, 
+with the algorithm explained in the 
+[supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf).
+It also hosts the functions that plot the Lyapunov exponent time series.
+
+### perturbation.py
+This script contains the function that run the algorithm
+to calculate the perturbed starting position, as explained in the
+[supplementary material](https://github.com/ManiOrgrim/Rikitake/blob/master/Rikitake___Supplementary_material.pdf).
+Function `perturbed_start` leads the execution of the script and is called
+by the `create_infile` function in create\_infile.py script.
+
+### read\_data.py
+ This script is a collection  of functions used to read the various 
+ input and outputs *Rikitake* needs. Its methods are called in several
+ places all along *rikitake*.
+
+### setup.py
+ This script is necessary for the system wide installation.
+ 
+### test_rikitake
+This file contains all the testing procedures that have been used to test Rikitake

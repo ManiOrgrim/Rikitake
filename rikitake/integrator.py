@@ -10,8 +10,6 @@ import sys
 from plumbum.cli.terminal import Progress
 from plumbum import colors
 
-
-#we take in input: mu, k, Nsteps, initial conditions, simID
 class dynamo:
     """this class represents a single simulation.
        states and parameters are stored in internal variables."""

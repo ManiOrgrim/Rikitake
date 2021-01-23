@@ -14,7 +14,7 @@ import lyapunov
 class Rikitake(cli.Application):
     """This program integrates the Rikitake Dynamo differential equation system, 
     generates the images of the phase space projections
-    and calculates the Lyapunov Exponents of the particular obtained solution."""
+    and calculates the Lyapunov Exponent of the particular obtained solution."""
     
     PROGNAME = "rikitake"
     VERSION ="2.0.1"
@@ -48,6 +48,9 @@ class Rikitake(cli.Application):
       
             print(colors.green|"IMAGE GENERATION:",self.images_created)
         if(self.alert):
+            """Alert script. If you wish to modify the alert act here.
+            Change duration and/or frequency as you wish
+            Or change directly the command os.system receives a sinput."""
             duration = 1  # seconds
             freq = 441  # Hz
             os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))

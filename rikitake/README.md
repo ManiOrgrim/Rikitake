@@ -491,4 +491,5 @@ by the `create_infile` function in create\_infile.py script.
  This script is necessary for the system wide installation.
  
 ### test_rikitake
-This file contains all the testing procedures that have been used to test Rikitake
+This file contains all the testing procedures that have been used to test Rikitake.
+You can run it using [pytest](https://docs.pytest.org/en/stable/).

@@ -90,7 +90,7 @@ def generate_image(filename):
     plt.savefig(image_filename, bbox_inches='tight')
     plt.close()
     
-     """ 
+    """ 
     x2 vs time plot
     """    
     

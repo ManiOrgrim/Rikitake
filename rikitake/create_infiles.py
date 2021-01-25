@@ -90,7 +90,6 @@ def create_infile(save_dir):
     initial_condition=[float(X) for X in in_data[3:6]]
     perturbed_initial_condition=perturbation.perturbed_start(initial_condition, float(mu), float(k), 2**-32) #original value of factor: 2**-4
     initial_conditions=[initial_condition, perturbed_initial_condition]
-    print(initial_conditions)
     identifier=in_data[6]
     outfile=open(save_dir+"/input_values.txt",'w+')
     for condition in initial_conditions:

@@ -64,7 +64,9 @@ def ask_for_data():
                         It is recommended that 0< mu< 10^2 and 10^-2< k < 10^2.
                         Continue anyway?""")
            if (go_on1):
-               pass
+               break
+           else:
+               continue
        if ('.' not in simulation_ID):
            break
        else:

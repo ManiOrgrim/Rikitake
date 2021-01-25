@@ -83,15 +83,15 @@ The Rikitake routine can be summarized in 4 steps:
 There are two ways the user can specify the desired inputs to Rikitake: we can 
 call them *in-run* and *out-run*. 
 As first step, Rikitake will search for a 
-file called *input_values.txt* within the current wrking directory. 
-If this file does't exist, the in-run input procedure will automatically start. 
+file called *input_values.txt* within the current working directory. 
+If this file doesn't exist, the in-run input procedure will automatically start. 
 If such file exists,
 Rikitake will ask the user 
 ~~~
 Do you want to create a new 'input_values.txt' file? (y/n)
 ~~~
  via standard output. Answer accordingly as you wish, 
- tying `y` ("yes") if you wish to create a new input file or `n` ("no") otherwise.
+ typing `y` ("yes") if you wish to create a new input file or `n` ("no") otherwise.
  If the answer is `y`  the in-run input procedure will start,
 otherwise the out-run input procedure will be performed. 
 
@@ -115,10 +115,10 @@ The answer should be given writing all the values separated by a space ' '
 character. 
 *N_steps* determines for how many time steps the integration will be performed.
  The default time step is *dt*=1/256=0.00390625 (arbitrary time units), 
- if not specified by the user [see here](#switches).
- This means that the simultation will run until a time value `t=dt * N_steps`, 
+ if not specified by the user ([see here](#switches) to see how to change it).
+ This means that the simulation will run until a time value `t=dt * N_steps`, 
  generating *N_steps* points as solution. As *N_steps* grows, 
- the lyapunov exponent estimate approaches  to the real value, 
+ the Lyapunov exponent estimate approaches  to the real value, 
  but it will take more computation time. 
  
  
@@ -126,14 +126,14 @@ character.
 every file that Rikitake will generate will have this string as initial characters.
 
 With these inputs Rikitake will create a file called *input_values.txt* 
-in the save directory. 
+in the working directory. 
 For more informations about these file see the 
 [dedicated section](#Input-file-layout).
 
 
-**Note**: if an "input_values.txt" already exists in the save directory, 
+**Note**: if an "input_values.txt" already exists in the current woring directory, 
 this procedure will overwrite it. 
-In this case, Rikitake will always warn the user and ask for 
+In this case, *Rikitake* will always warn the user and ask for 
 more confirmations before proceeding.
 
 
@@ -160,7 +160,7 @@ Where *μ* (float) and *k* (float) are the parameters of the simulation,
 *N_steps* (integer) is the number of integration steps and 
 *Sim_ID* (string) is the simulation identifier, that is the name that 
 Rikitake will use to store and identify the outputs. 
-These values must be equal between the two lines, otherwise Rikitake will end 
+These values must be equal between the two lines, otherwise Rikitake will stop 
 right after completing the integration (with exit
 value 6, see [here](#Errors-and-exit-codes). 
 The *x1_0u*,	*x2_0u*,	*y1_0u* (floats) are the initial states 
@@ -169,9 +169,11 @@ are the initial states for the perturbed
 states. These triplets *should* be different, in order for the simulation to be
  meaningful. If the two initial states are equal Rikitake will not stop but it 
  won't be able to calculate Lyapunov exponents (output Lyapunov exponent will be -∞).
-The user is free write its own *input_values.txt* file 
-(a basic text editor is sufficient) and Rikitake will work perfectly, 
+The user is free to write its own *input_values.txt* file 
+(a simple text editor is enough) and Rikitake will work perfectly, 
 given the file follows the right layout.
+
+
 **Note**: this file is explicitly searched by Rikitake with the exact name 
 *input_values.txt*. Any other name will make the file invisible to the program.
 
@@ -221,34 +223,35 @@ The time-series of the Lyapunov exponents will be plotted and saved as an image
 
 As final step, Rikitake creates 12 plots, 6 for each integration. The plots made 
 for each integration are 
-1. A 3-dimensional plot of the trajectory of the system in the phase-space
+1. A 3-dimensional plot of the trajectory of the system in the *x<sub>1<sub/>* *x<sub>2<sub/>**y<sub>1<sub/>* phase-space
 2. A projection of the trajectory in the *x<sub>1<sub/>* *x<sub>2<sub/>* plane
 3. A projection of the trajectory in the *x<sub>1<sub/>* *y<sub>1<sub/>* plane
 4. A projection of the trajectory in the *x<sub>2<sub/>* *y<sub>1<sub/>* plane
 5. A *x<sub>1<sub/>* vs *time* plot
 6. A *x<sub>2<sub/>* vs *time* plot
 
-The file format is png. The file  naming follows the structure "SimID_"+"simulation number_"+"plot subject", 
-where simulation number is 0 for the unperturbed solution, 1 for the perturbed solution.
+The file format is .png. The file  naming follows the structure "SimID_"+"simulation number_"+"plot subject", 
+where simulation number is 0 for the unperturbed solution, 1 for the perturbed solution. 
+See the [output section](#the-oututs).
 
 Once image generation is complete, the simulation is over. Rikitake will ask the user if he wishes to perform another simulation.
 If the answer is *yes*, Rikitake will start again from the 
 [input reading and creation](#Input-reading-and-creation) step, 
-otherwise it will shut down
+otherwise it will end
 with exit value 0 ( [more about exit values](#Errors-and-exit-codes)).
 
 # The outputs
 
 Rikitake will create 17 files 
 (16 proper output files plus the  *input_values.txt* file).
- Each of them will be explained here. In all of these file names 
+ Each of them will be explained here. In all of these filenames 
 'SimID' will be replaced with the simulation ID you gave Rikitake. 
 Files labeled with '0' refer to the unperturbed 
 solution and files labeled with '1' refer to the perturbed solution.
 1. SimID_0.csv
 2. SimID_1.csv
 
-Two *.csv* files that store the results of the integration, one for each state. 
+Two *.csv* files that store the results of the integration, one for each solution. 
 The first line records the values of parameters *µ* and *k*.
  The second line is a header reporting the column structure. 
  From the third line on, the integration results are stored in the format
@@ -305,20 +308,26 @@ Two *.png* images showing the projection of the trajectory in the
 15. SimIDlyap.dat
 
 
-A *.dat* file storing the value of the estimated greatest lyapunov exponent of the 
+A *.dat* file storing the value of the estimated greatest Lyapunov exponent of the 
 system. This value is the mean of the last 100 Lyapunov exponents calculated.
 
 
 16. SimID_lyap_exp.png
 
 
-A *.png* image showing the *lyapunov exponent estimate* vs *time* plot.
+A *.png* image showing the *Lyapunov exponent estimate* vs *time* plot.
 
 
 # Switches
 
 Rikitake accepts several switches. These commands can be given right from 
-command line when calling the program.
+command line when calling the program, in the format:
+~~~
+rikitake --command <args>
+~~~
+where you should replace `--command` with the actual command 
+and `<args>` with the argument when is needed.
+
 - **Suppress images** command: `--NOimg`. 
 
 Suppress all image generation, except for the Lyapunov exponent plot. 
@@ -339,11 +348,11 @@ Suppress the Lyapunov exponent estimate. The Lyapunov exponent plot will also no
 Rikitake will produce an acustic signal when 
 the process is completed. The sound is very annoying, so handle with care.
 
--  **Specify save directory** command: `--save-dir <path/to/dir>`
+-  **Specify working directory** command: `--save-dir <path/to/dir>`
 
  Specify the directory
-in which the results will be saved. *path/to/dir* has to be replace with the
- actual path of the save directory.
+in which *Rikitake* will run and save files. *path/to/dir* has to be replace with the
+ actual path of the directory.
 Default is current working directory.
 
 
@@ -365,35 +374,40 @@ but more will be implemented in the future.
 
 # Errors and exit codes
 When Rikitake terminates, wether it may be beacause the routine is over
-or errors have been arised, returns an exit code, that is a number associated with 
+or errors have been arised, it returns an exit code, that is a number associated with 
 a certain error in order to inform the user what happened. These exit codes are:
+
+
 0. Rikitake ran succesfully without problems.
 1. **Integration results could not be opened**. The files are missing or 
 the user has not reading permissions. This may happen if the user uses the `--NOint`
-flag without a prior integration.
+switch without a prior integration.
 2. **"input_values.txt" could not be opened**. This error happens wheter if the file has been deleted or if the user has not reading permissions.
-3. **".temp_for_create_infiles.txt" file could not be opened**. '.temp_for_create_infiles.txt' is a temporary
+3. **".temp_for_create_infiles.txt" file could not be opened**. 
+*.temp_for_create_infiles.txt* is a temporary
 file that in which Rikitake holds some useful in-run informations, and deletes it
  when the run is over.
 This error happens wheter if the file has been deleted or if the user has not reading permissions.
 4. **".temp_for_create_infiles.txt" is not written as expected**. Given that this file is directly created by Rikitake,
-is very hard for this error to be raised.
+is very hard for this error to be raised. If this happens, is very likely this is due to a bug, so
+don't hesitate to signal it.
 5. **"input_values.txt" is not written as expected**. This happens when the layout of the file 
-doen't respect the indications in [here](#Input-file-layout).
+doesn't respect the indications in [here](#Input-file-layout).
  Check if the two lines of the file have the same values (except 
 for the initial conditions).
 6. **Integration results are not written as expected**. In particular, the two result files
 may have different values of *μ*, *k* or a different number of integration steps. This happens
-if user-given integration results don't follow the proper layout.
+if user-given integration results don't follow the [proper layout](#the-outputs).
 
 **WARNINGS**: along with errors, Rikitake is provided with warnings for the user. 
 These warnings will not stop Rikitake, and it may run flawlessly. 
 These are usually due to the presence of unrecommended input values:
 - *N_steps* < 20000 : This low number of integration steps could lead 
 to the non-convergence of the Lyapunov exponent.
--  *μ* is not in the recommendend range of values, that is 0< μ< 10^2. This may cause
+-  *μ* is not in the recommendend range of values, that is 0< μ< 10<sup>2</sup>. This may cause
 overflow or undeflow issues during integration. 
-- *k* is not in the recommendend range of values, that is 10^(-2)< *k*< 10^(2). This may cause
+- *k* is not in the recommendend range of values, 
+that is 10<sup>-2</sup>< *k*< 10<sup>2</sup>. This may cause
 overflow or undeflow issues during integration. 
 - Sim_ID containing '.' character . This causes issues when the images are saved, 
 cropping the SimID in
@@ -406,13 +420,13 @@ the file names (e.g. if the SimID is "abc.def", images will be saved as if the S
 We want to use Rikitake to estimate the Lyapunov exponents of Rikitake geodynamo
 with parameters *μ*=10, *k*= 2 and unperturbed initial conditions (1,1,1).
 We want to perform 100000 integration steps. We choose "foo" as SimID.
-Run Rikitake form command line:
+Run Rikitake from command line:
 ~~~
 rikitake
 ~~~
-If a "input_values.txt" file already exists in the working directory the user 
+If an "input_values.txt" file already exists in the working directory the user 
 will be asked (twice) if they still wish to create a new input file and overwrite the previous one.
-If no such file already exists or if we answered 'yes' to the previous questions, 
+If no such file exists or if we answered 'yes' to the previous questions, 
 Rikitake will ask us for the input data. Type in the command line:
 ~~~
 10 2 100000 1 1 1 foo
@@ -430,8 +444,8 @@ Thanks for reading and have fun with Rikitake!
 # The file structure of Rikitake
 The structure of *Rikitake* is the following:
 
-**Rikitake**
-  * `rikitake`
+**Rikitake/**
+  * `rikitake/`
      - `__init__.py`
      - `__main__.py`
   * `create_infiles.py`
@@ -451,7 +465,7 @@ Its main feature is the application-class `Rikitake`, whose method `main`
 runs all along the execution of the program and eventually calling the other 
 scripts.
 In the `Rikitake` class are also defined the switches and three functions 
-(` there_is_infile`,`there_is_not_infile`,`create_infile`) for the 
+(`there_is_infile`,`there_is_not_infile`,`create_infile`) for the 
 input management.
 ### create\_infiles.py
 In this script are defined the functions that perform the *in-run* input creation.
@@ -462,9 +476,11 @@ This script leads the image generation process. the function `image_creator` is 
 called by `main` function in \_\_main\_\_.py.
 
 ### integrator.py
-This script leads the integration process. It defines the class "dynamo", that 
-stores a sigle simulation. Its internal variables store the simulation parameters and
-the x1,x2,y1, y2 time series. Its internal methods are `evolve`, that performs the actual integration,
+This script leads the integration process. It defines the class "dynamo", used to 
+represent a single simulation. 
+Its internal variables store the simulation parameters and
+the x1,x2,y1, y2 time series. Its internal methods are `evolve`, 
+that performs the actual integration,
 and a set of functions `Evo_x1`, `Evo_x2`, `Evo_y1`; `k1x1`, `k1x2`, `k1y1`,...,
 `k4x1`, `k4x2`, `k4y1` to calculate the Runge-Kutta factors.
 The method `generate_data` leads the process and is directly called in \_\_main\_\_.py.
